@@ -6,4 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\StudentTransfer.Dal\StudentTransfer.Dal.csproj" />
+    </ItemGroup>
+
 </Project>

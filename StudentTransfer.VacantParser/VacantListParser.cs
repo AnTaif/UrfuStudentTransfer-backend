@@ -1,7 +1,7 @@
 using HtmlAgilityPack;
-using StudentTransfer.Dal.Models.Vacant;
+using StudentTransfer.Dal.Entities.Vacant;
 
-namespace StudentTransfer.VacantListParser;
+namespace StudentTransfer.VacantParser;
 
 public static class VacantListParser
 {

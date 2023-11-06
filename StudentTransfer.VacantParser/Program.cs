@@ -1,4 +1,4 @@
-﻿using StudentTransfer.VacantListParser;
+﻿using StudentTransfer.VacantParser;
 
 var vacantList = await VacantListParser.ParseVacantItemsAsync();
 

@@ -1,4 +1,5 @@
 using StudentTransfer.Dal;
+using StudentTransfer.Logic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,14 +9,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (connectionString is not null)
-{
-    var dbPassword = System.Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
-    connectionString += $"Password={dbPassword}";
-}
 
 // Add layers
 builder.Services.AddDataLayer(connectionString ?? "");
+builder.Services.AddLogicLayer();
 
 var app = builder.Build();
 

@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentTransfer.Dal", "Stud
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentTransfer.Logic", "StudentTransfer.Logic\StudentTransfer.Logic.csproj", "{8ED57417-A152-4CFB-9B12-89E0513D1ECC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentTransfer.VacantListParser", "StudentTransfer.VacantListParser\StudentTransfer.VacantListParser.csproj", "{35E93E88-72FD-427C-83D6-9A14D62CBB93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentTransfer.VacantParser", "StudentTransfer.VacantParser\StudentTransfer.VacantParser.csproj", "{35E93E88-72FD-427C-83D6-9A14D62CBB93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
