@@ -1,15 +1,24 @@
+using StudentTransfer.Dal;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (connectionString is not null)
+{
+    var dbPassword = System.Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
+    connectionString += $"Password={dbPassword}";
+}
+
+// Add layers
+builder.Services.AddDataLayer(connectionString ?? "");
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
