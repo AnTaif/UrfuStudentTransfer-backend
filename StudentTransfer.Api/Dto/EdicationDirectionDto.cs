@@ -1,6 +1,6 @@
 namespace StudentTransfer.Api.Dto;
 
-public class EdicationDirectionDto
+public class EducationDirectionDto
 {
     public int Id { get; set; }
     
