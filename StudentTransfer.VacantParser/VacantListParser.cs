@@ -6,7 +6,7 @@ namespace StudentTransfer.VacantParser;
 
 public static class VacantListParser
 {
-    public static async Task<IEnumerable<EducationDirection>> ParseVacantItemsAsync()
+    public static async Task<List<EducationDirection>> ParseVacantItemsAsync()
     {
         const string url = "https://urfu.ru/sveden/vacant/";
         var htmlPage = "";
@@ -26,7 +26,7 @@ public static class VacantListParser
         return vacantList;
     }
 
-    private static IEnumerable<EducationDirection> ParseHtml(string html)
+    private static List<EducationDirection> ParseHtml(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
@@ -53,6 +53,6 @@ public static class VacantListParser
                     LocalBudgets = Convert.ToInt32(td[7].InnerText),
                     Contracts = Convert.ToInt32(td[8].InnerText)
                 };
-            });
+            }).ToList();
     } 
 }

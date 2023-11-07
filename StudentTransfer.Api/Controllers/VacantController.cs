@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using StudentTransfer.Api.Dto;
 using StudentTransfer.Dal.Entities.Vacant;
 using StudentTransfer.Logic.Services;
-using StudentTransfer.VacantParser;
 
 namespace StudentTransfer.Api.Controllers;
 
@@ -15,47 +15,32 @@ public class VacantController : ControllerBase
     {
         _vacantService = vacantService;
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()
     {
         var dataList = await _vacantService.GetAllAsync();
-        return Ok(dataList);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetByIdAsync(int id)
-    {
-        var data = await _vacantService.GetByIdAsync(id);
-        if (data != null)
+        var dtoList = dataList.Select(e => new EducationDirectionDto
         {
-            return Ok(data);
-        }
-
-        return BadRequest();
+            Id = e.Id,
+            Code = e.Code,
+            Name = e.Name,
+            Level = EducationLevelConverter.ConvertToString(e.Level),
+            Course = e.Course,
+            Form = EducationFormConverter.ConvertToString(e.Form),
+            FederalBudgets = e.FederalBudgets,
+            SubjectsBudgets = e.SubjectsBudgets,
+            LocalBudgets = e.LocalBudgets,
+            Contracts = e.Contracts
+        });
+        return Ok(dtoList);
     }
-
-    [HttpPost("list")]
-    public async Task<IActionResult> AddListAsync(List<EducationDirection> dataList)
-    {
-        await _vacantService.AddEnumerableAsync(dataList);
-        return Ok();
-    }
-
-    [HttpGet("update")]
+    
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateDatabaseAsync()
     {
-        await _vacantService.DeleteAllDataAsync();
-        var parsedData = await VacantListParser.ParseVacantItemsAsync();
-        await _vacantService.AddEnumerableAsync(parsedData);
-
-        return Ok();
-    }
-
-    [HttpDelete("all")]
-    public async Task<IActionResult> DeleteAllDataAsync()
-    {
-        await _vacantService.DeleteAllDataAsync();
+        await _vacantService.UpdateParseAsync();
+    
         return Ok();
     }
 }

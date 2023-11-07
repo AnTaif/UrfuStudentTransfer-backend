@@ -8,11 +8,15 @@ public interface IVacantService
 
     Task<EducationDirection?> GetByIdAsync(int id);
 
-    Task CreateAsync(EducationDirection direction);
+    Task<List<EducationDirection>> GetByLevelAsync(EducationLevel level);
 
-    Task DeleteByIdAsync(int id);
-    
-    Task DeleteAllDataAsync();
+    Task<List<EducationDirection>> GetByFormAsync(EducationForm form);
 
-    Task AddEnumerableAsync(IEnumerable<EducationDirection> directions);
+    // TODO: Should I put these methods for future???
+    // Task ClearAsync();
+    //
+    // Task AddDirectionsAsync(IEnumerable<EducationDirection> directions);
+
+    // TODO: Maybe separate parsing and database update code???
+    Task UpdateParseAsync();
 }

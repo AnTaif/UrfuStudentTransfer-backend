@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Vacant;
+using StudentTransfer.VacantParser;
 
 namespace StudentTransfer.Logic.Services;
 
@@ -17,37 +18,65 @@ public class VacantService : IVacantService
     {
         return await _dbContext.VacantList.ToListAsync();
     }
-
+    
     public async Task<EducationDirection?> GetByIdAsync(int id)
     {
         return await _dbContext.VacantList.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task CreateAsync(EducationDirection direction)
+    public async Task<List<EducationDirection>> GetByLevelAsync(EducationLevel level)
     {
-        _dbContext.VacantList.Add(direction);
-        await _dbContext.SaveChangesAsync();
+        return await _dbContext.VacantList.Where(e => e.Level == level).ToListAsync();
     }
 
-    public async Task DeleteByIdAsync(int id)
+    public async Task<List<EducationDirection>> GetByFormAsync(EducationForm form)
     {
-        var data = await _dbContext.VacantList.FindAsync(id);
-        if (data != null)
+        return await _dbContext.VacantList.Where(e => e.Form == form).ToListAsync();
+    }
+
+    public async Task UpdateParseAsync()
+    {
+        var vacantDirections = await VacantListParser.ParseVacantItemsAsync();
+
+        if (IsNewDirections(vacantDirections))
         {
-            _dbContext.VacantList.Remove(data);
-            await _dbContext.SaveChangesAsync();
+            await UpdateAsync(vacantDirections);
         }
     }
 
-    public async Task DeleteAllDataAsync()
+    private async Task UpdateAsync(List<EducationDirection> newDirections)
+    {
+        await DeleteAllDataAsync();
+        await AddListAsync(newDirections);
+    }
+    
+    private async Task DeleteAllDataAsync()
     {
         _dbContext.VacantList.RemoveRange(_dbContext.VacantList);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task AddEnumerableAsync(IEnumerable<EducationDirection> directions)
+    private async Task AddListAsync(List<EducationDirection> directions)
     {
         _dbContext.VacantList.AddRange(directions);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();   
+    }
+
+    private bool IsNewDirections(IEnumerable<EducationDirection> directions)
+    {
+        var isNew = !directions.All(dir => 
+            _dbContext.VacantList.Any(e => 
+                e.Code == dir.Code &&
+                e.Name == dir.Name &&
+                e.Level == dir.Level &&
+                e.Course == dir.Course &&
+                e.Form == dir.Form &&
+                e.FederalBudgets == dir.FederalBudgets &&
+                e.SubjectsBudgets == dir.SubjectsBudgets &&
+                e.LocalBudgets == dir.LocalBudgets &&
+                e.Contracts == dir.Contracts)
+        );
+        
+        return isNew;
     }
 }
