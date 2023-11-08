@@ -21,7 +21,7 @@ namespace StudentTransfer.Dal.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("StudentTransfer.Dal.Models.Vacant.EducationDirection", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.Vacant.EducationDirection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -11,7 +11,7 @@ using StudentTransfer.Dal;
 namespace StudentTransfer.Dal.Migrations
 {
     [DbContext(typeof(StudentTransferContext))]
-    [Migration("20231106135123_initialMigration")]
+    [Migration("20231108072017_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace StudentTransfer.Dal.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("StudentTransfer.Dal.Models.Vacant.EducationDirection", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.Vacant.EducationDirection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
