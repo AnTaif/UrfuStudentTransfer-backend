@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Api.Dto;
 using StudentTransfer.Dal.Entities.Vacant;
-using StudentTransfer.Logic.Services;
+using StudentTransfer.Bll.Services.Vacant;
+using StudentTransfer.Dal.Entities.Enums;
 
 namespace StudentTransfer.Api.Controllers;
 
@@ -20,7 +21,8 @@ public class VacantController : ControllerBase
     public async Task<IActionResult> GetAllAsync()
     {
         var dataList = await _vacantService.GetAllAsync();
-        var dtoList = dataList.Select(e => new EducationDirectionDto
+        var vacantDirections = dataList.ToList();
+        var dtoList = vacantDirections.Select(e => new EducationDirectionDto
         {
             Id = e.Id,
             Code = e.Code,

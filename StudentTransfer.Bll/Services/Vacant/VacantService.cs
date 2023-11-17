@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Dal;
+using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Dal.Entities.Vacant;
 using StudentTransfer.VacantParser;
 
-namespace StudentTransfer.Logic.Services;
+namespace StudentTransfer.Bll.Services.Vacant;
 
 public class VacantService : IVacantService
 {
@@ -14,37 +15,38 @@ public class VacantService : IVacantService
         _dbContext = dbContext;
     }
 
-    public async Task<List<EducationDirection>> GetAllAsync()
+    public async Task<List<VacantDirection>> GetAllAsync()
     {
         return await _dbContext.VacantList.ToListAsync();
     }
     
-    public async Task<EducationDirection?> GetByIdAsync(int id)
+    public async Task<VacantDirection?> GetByIdAsync(int id)
     {
         return await _dbContext.VacantList.FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<List<EducationDirection>> GetByLevelAsync(EducationLevel level)
+    public async Task<List<VacantDirection>> GetByLevelAsync(EducationLevel level)
     {
         return await _dbContext.VacantList.Where(e => e.Level == level).ToListAsync();
     }
 
-    public async Task<List<EducationDirection>> GetByFormAsync(EducationForm form)
+    public async Task<List<VacantDirection>> GetByFormAsync(EducationForm form)
     {
         return await _dbContext.VacantList.Where(e => e.Form == form).ToListAsync();
     }
 
     public async Task UpdateParseAsync()
     {
+        var vacantList = await _dbContext.VacantList.ToListAsync();
         var vacantDirections = await VacantListParser.ParseVacantItemsAsync();
 
-        if (IsNewDirections(vacantDirections))
+        if (!AreIdentical(vacantList, vacantDirections))
         {
             await UpdateAsync(vacantDirections);
         }
     }
 
-    private async Task UpdateAsync(List<EducationDirection> newDirections)
+    private async Task UpdateAsync(List<VacantDirection> newDirections)
     {
         await DeleteAllDataAsync();
         await AddListAsync(newDirections);
@@ -56,16 +58,16 @@ public class VacantService : IVacantService
         await _dbContext.SaveChangesAsync();
     }
 
-    private async Task AddListAsync(List<EducationDirection> directions)
+    private async Task AddListAsync(List<VacantDirection> directions)
     {
         _dbContext.VacantList.AddRange(directions);
         await _dbContext.SaveChangesAsync();   
     }
 
-    private bool IsNewDirections(IEnumerable<EducationDirection> directions)
+    private static bool AreIdentical(List<VacantDirection> vacantList, List<VacantDirection> directions)
     {
-        var isNew = !directions.All(dir => 
-            _dbContext.VacantList.Any(e => 
+        var areIdentical = directions.All(dir => 
+            vacantList.Any(e => 
                 e.Code == dir.Code &&
                 e.Name == dir.Name &&
                 e.Level == dir.Level &&
@@ -77,6 +79,6 @@ public class VacantService : IVacantService
                 e.Contracts == dir.Contracts)
         );
         
-        return isNew;
+        return areIdentical;
     }
 }

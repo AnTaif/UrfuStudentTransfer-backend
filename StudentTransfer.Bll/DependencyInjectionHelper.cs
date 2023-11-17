@@ -1,7 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using StudentTransfer.Logic.Services;
+using StudentTransfer.Bll.Services.Vacant;
+using StudentTransfer.Bll.Services;
 
-namespace StudentTransfer.Logic;
+namespace StudentTransfer.Bll;
 
 public static class DependencyInjectionHelper
 {

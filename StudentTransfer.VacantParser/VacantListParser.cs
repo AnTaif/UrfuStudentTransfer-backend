@@ -1,12 +1,13 @@
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Dal.Entities.Vacant;
 
 namespace StudentTransfer.VacantParser;
 
 public static class VacantListParser
 {
-    public static async Task<List<EducationDirection>> ParseVacantItemsAsync()
+    public static async Task<List<VacantDirection>> ParseVacantItemsAsync()
     {
         const string url = "https://urfu.ru/sveden/vacant/";
         var htmlPage = "";
@@ -26,7 +27,7 @@ public static class VacantListParser
         return vacantList;
     }
 
-    private static List<EducationDirection> ParseHtml(string html)
+    private static List<VacantDirection> ParseHtml(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
@@ -41,7 +42,7 @@ public static class VacantListParser
                 var nameInput = td[1].InnerText.Replace("\n", " ");
                 var cleanedName = Regex.Replace(nameInput, @"\s+", " ");
                 
-                return new EducationDirection
+                return new VacantDirection
                 {
                     Code = td[0].InnerText,
                     Name = cleanedName,

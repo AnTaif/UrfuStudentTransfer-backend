@@ -1,4 +1,4 @@
-namespace StudentTransfer.Dal.Entities.Vacant;
+namespace StudentTransfer.Dal.Entities.Enums;
 
 public enum EducationLevel
 {

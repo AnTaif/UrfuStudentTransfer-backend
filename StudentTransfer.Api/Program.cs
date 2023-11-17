@@ -1,5 +1,5 @@
 using StudentTransfer.Dal;
-using StudentTransfer.Logic;
+using StudentTransfer.Bll;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,12 +7,20 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("OpenPolicy", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add layers
-builder.Services.AddDataLayer(connectionString ?? "");
-builder.Services.AddLogicLayer();
+builder.Services
+    .AddDataLayer(connectionString!)
+    .AddLogicLayer();
 
 var app = builder.Build();
 
@@ -23,6 +31,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("OpenPolicy");
 
 app.UseAuthorization();
 
