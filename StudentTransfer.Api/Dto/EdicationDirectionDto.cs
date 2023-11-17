@@ -1,18 +1,18 @@
-namespace StudentTransfer.Dal.Models.Vacant;
+namespace StudentTransfer.Api.Dto;
 
-public class EducationDirection
+public class EducationDirectionDto
 {
     public int Id { get; set; }
     
     public string Code { get; set; } = null!;
     
     public string Name { get; set; } = null!;
-
-    public EducationLevel Level { get; set; }
+    
+    public string? Level { get; set; }
     
     public int Course { get; set; }
     
-    public EducationForm Form { get; set; }
+    public string? Form { get; set; }
     
     public int FederalBudgets { get; set; }
     
