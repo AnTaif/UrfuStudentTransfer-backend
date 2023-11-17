@@ -4,11 +4,12 @@ namespace StudentTransfer.Dal;
 
 public class StudentTransferContext : DbContext
 {
-        public DbSet<EducationDirection> VacantList { get; set; } = null!;
+        /// <summary>
+        /// Actual vacant list, sometimes needed to be updated (post to ../api/vacant/update)
+        /// </summary>
+        public DbSet<VacantDirection> VacantList { get; set; } = null!;
 
         public StudentTransferContext(DbContextOptions<StudentTransferContext> options) : base(options)
         {
         }
-        
-        
 }
