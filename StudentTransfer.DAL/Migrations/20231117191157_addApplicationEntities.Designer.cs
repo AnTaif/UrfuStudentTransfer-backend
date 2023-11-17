@@ -12,7 +12,7 @@ using StudentTransfer.Dal;
 namespace StudentTransfer.Dal.Migrations
 {
     [DbContext(typeof(StudentTransferContext))]
-    [Migration("20231117175922_addApplicationEntities")]
+    [Migration("20231117191157_addApplicationEntities")]
     partial class addApplicationEntities
     {
         /// <inheritdoc />
@@ -25,7 +25,39 @@ namespace StudentTransfer.Dal.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.Application", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.FileRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApplicationRequestId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UploadTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationRequestId");
+
+                    b.ToTable("FileRecord");
+                });
+
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.ApplicationRequest.ApplicationRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,7 +92,7 @@ namespace StudentTransfer.Dal.Migrations
                     b.ToTable("Applications");
                 });
 
-            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.ApplicationStatus", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.ApplicationRequest.ApplicationStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,7 +115,7 @@ namespace StudentTransfer.Dal.Migrations
                     b.ToTable("ApplicationStatus");
                 });
 
-            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.Direction", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.ApplicationRequest.Direction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,10 +132,6 @@ namespace StudentTransfer.Dal.Migrations
 
                     b.Property<int>("Course")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("FederalBudgets")
                         .HasColumnType("integer");
@@ -127,13 +155,9 @@ namespace StudentTransfer.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Direction");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Direction");
-
-                    b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.FileRecord", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.Vacant.VacantDirection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -141,46 +165,56 @@ namespace StudentTransfer.Dal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ApplicationId")
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Contracts")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Extension")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Course")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FederalBudgets")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Form")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LocalBudgets")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("UploadTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("SubjectsBudgets")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("FileRecord");
+                    b.ToTable("VacantList");
                 });
 
-            modelBuilder.Entity("StudentTransfer.Dal.Entities.Vacant.VacantDirection", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.FileRecord", b =>
                 {
-                    b.HasBaseType("StudentTransfer.Dal.Entities.Application.Direction");
-
-                    b.HasDiscriminator().HasValue("VacantDirection");
+                    b.HasOne("StudentTransfer.Dal.Entities.ApplicationRequest.ApplicationRequest", null)
+                        .WithMany("Files")
+                        .HasForeignKey("ApplicationRequestId");
                 });
 
-            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.Application", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.ApplicationRequest.ApplicationRequest", b =>
                 {
-                    b.HasOne("StudentTransfer.Dal.Entities.Application.Direction", "Direction")
+                    b.HasOne("StudentTransfer.Dal.Entities.ApplicationRequest.Direction", "Direction")
                         .WithMany()
                         .HasForeignKey("DirectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StudentTransfer.Dal.Entities.Application.ApplicationStatus", "Status")
+                    b.HasOne("StudentTransfer.Dal.Entities.ApplicationRequest.ApplicationStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -191,14 +225,7 @@ namespace StudentTransfer.Dal.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.FileRecord", b =>
-                {
-                    b.HasOne("StudentTransfer.Dal.Entities.Application.Application", null)
-                        .WithMany("Files")
-                        .HasForeignKey("ApplicationId");
-                });
-
-            modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.Application", b =>
+            modelBuilder.Entity("StudentTransfer.Dal.Entities.ApplicationRequest.ApplicationRequest", b =>
                 {
                     b.Navigation("Files");
                 });

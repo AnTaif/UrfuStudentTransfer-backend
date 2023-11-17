@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StudentTransfer.Dal.Entities.ApplicationRequest;
 using StudentTransfer.Dal.Entities.Vacant;
 namespace StudentTransfer.Dal;
 
@@ -8,6 +9,8 @@ public class StudentTransferContext : DbContext
         /// Actual vacant list, sometimes needed to be updated (post to ../api/vacant/update)
         /// </summary>
         public DbSet<VacantDirection> VacantList { get; set; } = null!;
+
+        public DbSet<ApplicationRequest> Applications { get; set; } = null!;
 
         public StudentTransferContext(DbContextOptions<StudentTransferContext> options) : base(options)
         {

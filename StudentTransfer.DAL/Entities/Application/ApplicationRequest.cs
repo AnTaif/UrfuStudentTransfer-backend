@@ -1,8 +1,9 @@
+using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.Enums;
 
-namespace StudentTransfer.Dal.Entities.Application;
+namespace StudentTransfer.Dal.Entities.ApplicationRequest;
 
-public class Application : Entity
+public class ApplicationRequest : Entity
 {
     public ApplicationType Type { get; set; }
     

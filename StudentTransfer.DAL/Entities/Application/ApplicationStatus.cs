@@ -1,6 +1,6 @@
 using StudentTransfer.Dal.Entities.Enums;
 
-namespace StudentTransfer.Dal.Entities.Application;
+namespace StudentTransfer.Dal.Entities.ApplicationRequest;
 
 public class ApplicationStatus : Entity
 {

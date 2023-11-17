@@ -1,7 +1,6 @@
 using StudentTransfer.Dal.Entities.Enums;
-using StudentTransfer.Dal.Entities.Vacant;
 
-namespace StudentTransfer.Dal.Entities.Application;
+namespace StudentTransfer.Dal.Entities.ApplicationRequest;
 
 public class Direction : Entity
 {
