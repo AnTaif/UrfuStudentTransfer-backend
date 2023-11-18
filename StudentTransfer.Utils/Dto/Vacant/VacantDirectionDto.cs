@@ -1,6 +1,6 @@
-namespace StudentTransfer.Api.Dto;
+namespace StudentTransfer.Utils.Dto.Vacant;
 
-public class EducationDirectionDto
+public class VacantDirectionDto
 {
     public int Id { get; set; }
     

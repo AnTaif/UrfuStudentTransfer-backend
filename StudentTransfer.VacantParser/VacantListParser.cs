@@ -46,9 +46,9 @@ public static class VacantListParser
                 {
                     Code = td[0].InnerText,
                     Name = cleanedName,
-                    Level = EducationLevelConverter.ConvertToLevel(td[2].InnerText),
+                    Level = EducationLevelMapper.MapToLevel(td[2].InnerText),
                     Course = Convert.ToInt32(td[3].InnerText),
-                    Form = EducationFormConverter.ConvertToForm(td[4].InnerText),
+                    Form = EducationFormMapper.MapToForm(td[4].InnerText),
                     FederalBudgets = Convert.ToInt32(td[5].InnerText),
                     SubjectsBudgets = Convert.ToInt32(td[6].InnerText),
                     LocalBudgets = Convert.ToInt32(td[7].InnerText),

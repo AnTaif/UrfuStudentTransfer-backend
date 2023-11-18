@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.ApplicationRequest;
 using StudentTransfer.Dal.Entities.Vacant;
 namespace StudentTransfer.Dal;

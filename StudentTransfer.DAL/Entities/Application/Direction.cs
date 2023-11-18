@@ -13,12 +13,4 @@ public class Direction : Entity
     public int Course { get; init; }
     
     public EducationForm Form { get; init; }
-    
-    public int FederalBudgets { get; init; }
-    
-    public int SubjectsBudgets { get; init; }
-    
-    public int LocalBudgets { get; init; }     
-    
-    public int Contracts { get; init; }
 }

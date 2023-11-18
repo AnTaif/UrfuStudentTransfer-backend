@@ -7,9 +7,9 @@ public enum EducationForm
     Mixed = 2
 }
 
-public static class EducationFormConverter
+public static class EducationFormMapper
 {
-    public static EducationForm ConvertToForm(string strForm)
+    public static EducationForm MapToForm(this string strForm)
     {
         return strForm.ToLower() switch
         {
@@ -20,7 +20,7 @@ public static class EducationFormConverter
         };
     }
 
-    public static string ConvertToString(EducationForm form)
+    public static string MapToString(this EducationForm form)
     {
         return form switch
         {

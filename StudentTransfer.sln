@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentTransfer.Bll", "Stud
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentTransfer.VacantParser", "StudentTransfer.VacantParser\StudentTransfer.VacantParser.csproj", "{35E93E88-72FD-427C-83D6-9A14D62CBB93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentTransfer.Utils", "StudentTransfer.Utils\StudentTransfer.Utils.csproj", "{2AFCBE7E-139F-4A6B-9912-AC8CB77D2FEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{35E93E88-72FD-427C-83D6-9A14D62CBB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35E93E88-72FD-427C-83D6-9A14D62CBB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35E93E88-72FD-427C-83D6-9A14D62CBB93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AFCBE7E-139F-4A6B-9912-AC8CB77D2FEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AFCBE7E-139F-4A6B-9912-AC8CB77D2FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AFCBE7E-139F-4A6B-9912-AC8CB77D2FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AFCBE7E-139F-4A6B-9912-AC8CB77D2FEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

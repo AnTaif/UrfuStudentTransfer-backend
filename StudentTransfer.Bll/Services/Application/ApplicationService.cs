@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Dal;
-using StudentTransfer.Dal.Entities.ApplicationRequest;
+using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.Enums;
 
 namespace StudentTransfer.Bll.Services.Application;
@@ -39,7 +39,7 @@ public class ApplicationService : IApplicationService
 
     public async Task<List<ApplicationRequest>> GetByStatusAsync(Status status)
     {
-        var application = _context.Applications.Where(a => a.Status!.Status == status);
+        var application = _context.Applications.Where(a => a.CurrentStatus == status);
 
         return await application.ToListAsync();
     }

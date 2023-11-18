@@ -1,17 +1,18 @@
 using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Dal.Entities.Vacant;
+using StudentTransfer.Utils.Dto.Vacant;
 
 namespace StudentTransfer.Bll.Services.Vacant;
 
 public interface IVacantService
 {
-    Task<List<VacantDirection>> GetAllAsync();
+    Task<List<VacantDirectionDto>> GetAllAsync();
 
-    Task<VacantDirection?> GetByIdAsync(int id);
+    Task<VacantDirectionDto?> GetByIdAsync(int id);
 
-    Task<List<VacantDirection>> GetByLevelAsync(EducationLevel level);
+    Task<List<VacantDirectionDto>> GetByLevelAsync(EducationLevel level);
 
-    Task<List<VacantDirection>> GetByFormAsync(EducationForm form);
+    Task<List<VacantDirectionDto>> GetByFormAsync(EducationForm form);
     
     Task UpdateParseAsync();
 }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Dal.Entities.Vacant;
+using StudentTransfer.Utils.Dto.Vacant;
 using StudentTransfer.VacantParser;
 
 namespace StudentTransfer.Bll.Services.Vacant;
@@ -15,24 +16,89 @@ public class VacantService : IVacantService
         _dbContext = dbContext;
     }
 
-    public async Task<List<VacantDirection>> GetAllAsync()
+    public async Task<List<VacantDirectionDto>> GetAllAsync()
     {
-        return await _dbContext.VacantList.ToListAsync();
+        var directions = await _dbContext.VacantList.ToListAsync();
+        var dtos = directions.Select(d => new VacantDirectionDto()
+        {
+            Id = d.Id,
+            Code = d.Code,
+            Name = d.Name,
+            Level = d.Level.MapToString(),
+            Course = d.Course,
+            Form = d.Form.MapToString(),
+            FederalBudgets = d.FederalBudgets,
+            SubjectsBudgets = d.SubjectsBudgets,
+            LocalBudgets = d.LocalBudgets,
+            Contracts = d.Contracts
+        });
+        return dtos.ToList();
+        
+        //TODO: переместить маппинг в дто в отдельный класс
     }
     
-    public async Task<VacantDirection?> GetByIdAsync(int id)
+    public async Task<VacantDirectionDto?> GetByIdAsync(int id)
     {
-        return await _dbContext.VacantList.FirstOrDefaultAsync(e => e.Id == id);
+        var direction = await _dbContext.VacantList.FirstOrDefaultAsync(e => e.Id == id);
+
+        if (direction == null)
+            return null;
+        
+        var dto = new VacantDirectionDto()
+        {
+            Id = direction.Id,
+            Code = direction.Code,
+            Name = direction.Name,
+            Level = direction.Level.MapToString(),
+            Course = direction.Course,
+            Form = direction.Form.MapToString(),
+            FederalBudgets = direction.FederalBudgets,
+            SubjectsBudgets = direction.SubjectsBudgets,
+            LocalBudgets = direction.LocalBudgets,
+            Contracts = direction.Contracts
+        };
+
+        return dto;
     }
 
-    public async Task<List<VacantDirection>> GetByLevelAsync(EducationLevel level)
+    public async Task<List<VacantDirectionDto>> GetByLevelAsync(EducationLevel level)
     {
-        return await _dbContext.VacantList.Where(e => e.Level == level).ToListAsync();
+        var directions = await _dbContext.VacantList.Where(e => e.Level == level).ToListAsync();
+        
+        var dtos = directions.Select(d => new VacantDirectionDto()
+        {
+            Id = d.Id,
+            Code = d.Code,
+            Name = d.Name,
+            Level = d.Level.MapToString(),
+            Course = d.Course,
+            Form = d.Form.MapToString(),
+            FederalBudgets = d.FederalBudgets,
+            SubjectsBudgets = d.SubjectsBudgets,
+            LocalBudgets = d.LocalBudgets,
+            Contracts = d.Contracts
+        });
+        return dtos.ToList();
     }
 
-    public async Task<List<VacantDirection>> GetByFormAsync(EducationForm form)
+    public async Task<List<VacantDirectionDto>> GetByFormAsync(EducationForm form)
     {
-        return await _dbContext.VacantList.Where(e => e.Form == form).ToListAsync();
+        var directions = await _dbContext.VacantList.Where(e => e.Form == form).ToListAsync();
+        
+        var dtos = directions.Select(d => new VacantDirectionDto()
+        {
+            Id = d.Id,
+            Code = d.Code,
+            Name = d.Name,
+            Level = d.Level.MapToString(),
+            Course = d.Course,
+            Form = d.Form.MapToString(),
+            FederalBudgets = d.FederalBudgets,
+            SubjectsBudgets = d.SubjectsBudgets,
+            LocalBudgets = d.LocalBudgets,
+            Contracts = d.Contracts
+        });
+        return dtos.ToList();
     }
 
     public async Task UpdateParseAsync()

@@ -18,7 +18,7 @@
     <ItemGroup>
       <ProjectReference Include="..\StudentTransfer.Dal\StudentTransfer.Dal.csproj" />
       <ProjectReference Include="..\StudentTransfer.Bll\StudentTransfer.Bll.csproj" />
-      <ProjectReference Include="..\StudentTransfer.VacantParser\StudentTransfer.VacantParser.csproj" />
+      <ProjectReference Include="..\StudentTransfer.Utils\StudentTransfer.Utils.csproj" />
     </ItemGroup>
 
 </Project>

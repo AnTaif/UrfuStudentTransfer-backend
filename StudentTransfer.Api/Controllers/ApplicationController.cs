@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Bll.Services.Application;
-using StudentTransfer.Dal.Entities.ApplicationRequest;
+using StudentTransfer.Dal.Entities.Application;
+using StudentTransfer.Utils.Dto.Application;
 
 namespace StudentTransfer.Api.Controllers;
 
@@ -22,9 +23,11 @@ public class ApplicationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task AddApplication(ApplicationRequest application)
+    public async Task AddApplication([FromBody]ApplicationDto application, List<IFormFile> files)
     {
-        await _service.AddAsync(application);
+        var a = application;
+
+        //await _service.AddAsync(application);
     }
     
     

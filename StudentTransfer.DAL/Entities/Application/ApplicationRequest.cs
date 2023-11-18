@@ -1,7 +1,7 @@
-using StudentTransfer.Dal.Entities.Application;
+using StudentTransfer.Dal.Entities.ApplicationRequest;
 using StudentTransfer.Dal.Entities.Enums;
 
-namespace StudentTransfer.Dal.Entities.ApplicationRequest;
+namespace StudentTransfer.Dal.Entities.Application;
 
 public class ApplicationRequest : Entity
 {
@@ -10,8 +10,9 @@ public class ApplicationRequest : Entity
     public int UserId { get; set; }
     //public virtual User User { get; set; }
     
-    public int StatusId { get; set; }
-    public ApplicationStatus? Status { get; set; }
+    public Status CurrentStatus { get; set; }
+    
+    public virtual List<ApplicationStatus>? Updates { get; set; }
     
     public List<FileRecord>? Files { get; set; }
     
