@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StudentTransfer.Bll.Mappers;
 using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Dal.Entities.Vacant;
@@ -19,44 +20,15 @@ public class VacantService : IVacantService
     public async Task<List<VacantDirectionDto>> GetAllAsync()
     {
         var directions = await _dbContext.VacantList.ToListAsync();
-        var dtos = directions.Select(d => new VacantDirectionDto()
-        {
-            Id = d.Id,
-            Code = d.Code,
-            Name = d.Name,
-            Level = d.Level.MapToString(),
-            Course = d.Course,
-            Form = d.Form.MapToString(),
-            FederalBudgets = d.FederalBudgets,
-            SubjectsBudgets = d.SubjectsBudgets,
-            LocalBudgets = d.LocalBudgets,
-            Contracts = d.Contracts
-        });
+        var dtos = directions.Select(d => d.ToDto());
         return dtos.ToList();
-        
-        //TODO: переместить маппинг в дто в отдельный класс
     }
     
     public async Task<VacantDirectionDto?> GetByIdAsync(int id)
     {
         var direction = await _dbContext.VacantList.FirstOrDefaultAsync(e => e.Id == id);
 
-        if (direction == null)
-            return null;
-        
-        var dto = new VacantDirectionDto()
-        {
-            Id = direction.Id,
-            Code = direction.Code,
-            Name = direction.Name,
-            Level = direction.Level.MapToString(),
-            Course = direction.Course,
-            Form = direction.Form.MapToString(),
-            FederalBudgets = direction.FederalBudgets,
-            SubjectsBudgets = direction.SubjectsBudgets,
-            LocalBudgets = direction.LocalBudgets,
-            Contracts = direction.Contracts
-        };
+        var dto = direction?.ToDto();
 
         return dto;
     }
@@ -65,19 +37,7 @@ public class VacantService : IVacantService
     {
         var directions = await _dbContext.VacantList.Where(e => e.Level == level).ToListAsync();
         
-        var dtos = directions.Select(d => new VacantDirectionDto()
-        {
-            Id = d.Id,
-            Code = d.Code,
-            Name = d.Name,
-            Level = d.Level.MapToString(),
-            Course = d.Course,
-            Form = d.Form.MapToString(),
-            FederalBudgets = d.FederalBudgets,
-            SubjectsBudgets = d.SubjectsBudgets,
-            LocalBudgets = d.LocalBudgets,
-            Contracts = d.Contracts
-        });
+        var dtos = directions.Select(d => d.ToDto());
         return dtos.ToList();
     }
 
@@ -85,19 +45,7 @@ public class VacantService : IVacantService
     {
         var directions = await _dbContext.VacantList.Where(e => e.Form == form).ToListAsync();
         
-        var dtos = directions.Select(d => new VacantDirectionDto()
-        {
-            Id = d.Id,
-            Code = d.Code,
-            Name = d.Name,
-            Level = d.Level.MapToString(),
-            Course = d.Course,
-            Form = d.Form.MapToString(),
-            FederalBudgets = d.FederalBudgets,
-            SubjectsBudgets = d.SubjectsBudgets,
-            LocalBudgets = d.LocalBudgets,
-            Contracts = d.Contracts
-        });
+        var dtos = directions.Select(d => d.ToDto());
         return dtos.ToList();
     }
 
