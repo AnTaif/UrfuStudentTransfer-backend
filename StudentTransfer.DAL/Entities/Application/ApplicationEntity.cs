@@ -1,10 +1,11 @@
-using StudentTransfer.Dal.Entities.ApplicationRequest;
 using StudentTransfer.Dal.Entities.Enums;
 
 namespace StudentTransfer.Dal.Entities.Application;
 
-public class ApplicationRequest : Entity
+public class ApplicationEntity
 {
+    public int Id { get; set; }
+    
     public ApplicationType Type { get; set; }
     
     public int UserId { get; set; }
@@ -14,12 +15,12 @@ public class ApplicationRequest : Entity
     
     public virtual List<ApplicationStatus>? Updates { get; set; }
     
-    public List<FileRecord>? Files { get; set; }
+    public List<FileEntity>? Files { get; set; }
     
     public DateTime InitialDate { get; set; }
     
     public int DirectionId { get; set; }
-    public Direction? Direction { get; set; }
-    
+    public virtual Direction Direction { get; set; } = null!;
+
     public bool IsActive { get; set; }
 }

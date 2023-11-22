@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using StudentTransfer.Bll.Mappers.Application;
 using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.Enums;
+using StudentTransfer.Utils.Dto.Application;
+using File = System.IO.File;
 
 namespace StudentTransfer.Bll.Services.Application;
 
@@ -14,42 +17,79 @@ public class ApplicationService : IApplicationService
         _context = context;
     }
     
-    public async Task<List<ApplicationRequest>> GetAllAsync()
+    public async Task<List<ApplicationDto>> GetAllAsync()
     {
-        return await _context.Applications.ToListAsync();
+        var applications =  await _context.Applications.Include(a => a.Direction).ToListAsync();
+        var dtos = applications.Select(a => a.ToDto()).ToList();
+
+        return dtos;
     }
 
-    public async Task<ApplicationRequest?> GetByIdAsync(int id)
+    public async Task<ApplicationDto?> GetByIdAsync(int id)
     {
-        return await _context.Applications.FirstOrDefaultAsync(a => a.Id == id);
+        var application = await _context.Applications.FirstOrDefaultAsync(a => a.Id == id);
+
+        var dto = application?.ToDto();
+
+        return dto;
     }
 
-    public async Task AddAsync(ApplicationRequest application)
+    public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, List<FileDto> fileDtos)
     {
+        //TODO: Save files
+
+        var files = fileDtos.Select(f => f.ToEntity()).ToList();
+
+        var vacantDirection = _context.VacantList.First(v => v.Id == request.DirectionId);
+        var direction = new Direction
+        {
+            Code = vacantDirection.Code,
+            Name = vacantDirection.Name,
+            Level = vacantDirection.Level,
+            Course = vacantDirection.Course,
+            Form = vacantDirection.Form
+        };
+        
+        var application = new ApplicationEntity
+        {
+            Type = request.Type.MapToApplicationType(),
+            UserId = request.UserId,
+            CurrentStatus = Status.Sent,
+            Updates = null,
+            Files = files,
+            InitialDate = request.Date.ToUniversalTime(),
+            Direction = direction,
+            IsActive = true
+        };
+
         await _context.AddAsync(application);
         await _context.SaveChangesAsync();
+
+        return application.ToDto();
     }
 
-    public async Task<List<ApplicationRequest>> GetActiveAsync()
+    public async Task<List<ApplicationDto>> GetActiveAsync()
     {
-        var activeApplications = _context.Applications.Where(a => a.IsActive);
-
-        return await activeApplications.ToListAsync();
+        var activeApplications = await _context.Applications.Where(a => a.IsActive).ToListAsync();
+        var dtos = activeApplications.Select(a => a.ToDto()).ToList();
+        
+        return dtos;
     }
 
-    public async Task<List<ApplicationRequest>> GetByStatusAsync(Status status)
+    public async Task<List<ApplicationDto>> GetByStatusAsync(Status status)
     {
-        var application = _context.Applications.Where(a => a.CurrentStatus == status);
+        var applications = await _context.Applications.Where(a => a.CurrentStatus == status).ToListAsync();
 
-        return await application.ToListAsync();
+        var dtos = applications.Select(a => a.ToDto()).ToList();
+        return dtos;
     }
 
-    public Task DeleteAsync(ApplicationRequest application)
+    public Task DeleteAsync(ApplicationDto application)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(ApplicationRequest application)
+    public Task UpdateAsync(ApplicationDto application)
     {
         throw new NotImplementedException();
     }

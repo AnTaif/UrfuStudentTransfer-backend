@@ -8,9 +8,9 @@ public enum Status
     Rejected = 3
 }
 
-static class StatusExtension
+public static class StatusMapper
 {
-    public static Status ConvertToStatus(this string strStatus)
+    public static Status MapToStatus(this string strStatus)
     {
         return strStatus.ToLower() switch
         {
@@ -22,7 +22,7 @@ static class StatusExtension
         };
     }
 
-    public static string ConvertToString(this Status status)
+    public static string MapToString(this Status status)
     {
         return status switch
         {

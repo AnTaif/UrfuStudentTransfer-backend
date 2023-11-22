@@ -20,6 +20,14 @@ public class VacantController : ControllerBase
         var dtoList = await _vacantService.GetAllAsync();
         return Ok(dtoList);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetByIdAsync(int id)
+    {
+        var dto = await _vacantService.GetByIdAsync(id);
+
+        return Ok(dto);
+    }
     
     [HttpPost("update")]
     public async Task<IActionResult> UpdateDatabaseAsync()

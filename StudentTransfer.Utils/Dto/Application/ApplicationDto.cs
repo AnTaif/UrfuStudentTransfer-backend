@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Http;
+
 namespace StudentTransfer.Utils.Dto.Application;
 
 public class ApplicationDto
 {
     public int Id { get; set; }
+
+    public string Type { get; set; } = null!;
     
     public int UserId { get; set; }
     
@@ -19,5 +23,6 @@ public class ApplicationDto
 
 public record CreateApplicationRequest(
     int UserId, 
+    string Type,
     DateTime Date, 
     int DirectionId);

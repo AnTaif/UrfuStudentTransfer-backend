@@ -1,10 +1,13 @@
+using System.ComponentModel.DataAnnotations;
 using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.Enums;
 
 namespace StudentTransfer.Dal.Entities.Vacant;
 
-public class VacantDirection : Entity
+public class VacantDirection
 {
+    public int Id { get; set; }
+    
     public string Code { get; init; } = null!;
     
     public string Name { get; init; } = null!;

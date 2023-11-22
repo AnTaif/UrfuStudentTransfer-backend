@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Dal.Entities.Application;
-using StudentTransfer.Dal.Entities.ApplicationRequest;
 using StudentTransfer.Dal.Entities.Vacant;
 namespace StudentTransfer.Dal;
 
@@ -11,7 +10,7 @@ public class StudentTransferContext : DbContext
         /// </summary>
         public DbSet<VacantDirection> VacantList { get; set; } = null!;
 
-        public DbSet<ApplicationRequest> Applications { get; set; } = null!;
+        public DbSet<ApplicationEntity> Applications { get; set; } = null!;
 
         public StudentTransferContext(DbContextOptions<StudentTransferContext> options) : base(options)
         {

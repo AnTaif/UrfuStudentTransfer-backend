@@ -1,22 +1,22 @@
 using StudentTransfer.Dal.Entities.Application;
-using StudentTransfer.Dal.Entities.ApplicationRequest;
 using StudentTransfer.Dal.Entities.Enums;
+using StudentTransfer.Utils.Dto.Application;
 
 namespace StudentTransfer.Bll.Services.Application;
 
 public interface IApplicationService
 {
-    Task<List<ApplicationRequest>> GetAllAsync();
+    Task<List<ApplicationDto>> GetAllAsync();
     
-    Task<ApplicationRequest?> GetByIdAsync(int id);
+    Task<ApplicationDto?> GetByIdAsync(int id);
 
-    Task AddAsync(ApplicationRequest application);
+    Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, List<FileDto> fileDtos);
 
-    Task<List<ApplicationRequest>> GetActiveAsync();
+    Task<List<ApplicationDto>> GetActiveAsync();
 
-    Task<List<ApplicationRequest>> GetByStatusAsync(Status status);
+    Task<List<ApplicationDto>> GetByStatusAsync(Status status);
 
-    Task DeleteAsync(ApplicationRequest application);
+    Task DeleteAsync(ApplicationDto application);
 
-    Task UpdateAsync(ApplicationRequest application);
+    Task UpdateAsync(ApplicationDto application);
 }

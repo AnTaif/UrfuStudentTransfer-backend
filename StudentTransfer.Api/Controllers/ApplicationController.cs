@@ -10,25 +10,53 @@ namespace StudentTransfer.Api.Controllers;
 public class ApplicationController : ControllerBase
 {
     private readonly IApplicationService _service;
+    private readonly IWebHostEnvironment _hostEnvironment;
 
-    public ApplicationController(IApplicationService service)
+    public ApplicationController(IApplicationService service, IWebHostEnvironment hostEnvironment)
     {
         _service = service;
+        _hostEnvironment = hostEnvironment;
     }
 
     [HttpGet]
-    public async Task<List<ApplicationRequest>> GetAll()
+    public async Task<List<ApplicationDto>> GetAll()
     {
         return await _service.GetAllAsync();
     }
 
     [HttpPost]
-    public async Task AddApplication([FromBody]ApplicationDto application, List<IFormFile> files)
+    public async Task<IActionResult> AddApplication([FromForm]CreateApplicationRequest applicationRequest, List<IFormFile> formFiles)
     {
-        var a = application;
+        var fileRootPath = Path.Combine(_hostEnvironment.ContentRootPath, "Uploads");
+        Directory.CreateDirectory(fileRootPath);
 
-        //await _service.AddAsync(application);
+        var fileDtos = new List<FileDto>();
+        
+        foreach (var formFile in formFiles)
+        {
+            var fileId = Guid.NewGuid();
+            var filePath = Path.Combine(fileRootPath, fileId.ToString());
+
+            await using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await formFile.CopyToAsync(fileStream);
+            }
+
+            var fileDto = new FileDto
+            {
+                Id = fileId,
+                //OwnerId = Guid.NewGuid(), //TODO: UserId
+                Name = formFile.FileName,
+                Extension = Path.GetExtension(formFile.FileName),
+                Path = filePath,
+                UploadDate = DateTime.UtcNow //TODO: Change to local timestamp?
+            };
+            
+            fileDtos.Add(fileDto);
+        }
+        
+        var dto = await _service.CreateAsync(applicationRequest, fileDtos);
+
+        return Ok(dto);
     }
-    
-    
 }

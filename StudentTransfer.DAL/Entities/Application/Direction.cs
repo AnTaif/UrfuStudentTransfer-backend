@@ -1,9 +1,11 @@
 using StudentTransfer.Dal.Entities.Enums;
 
-namespace StudentTransfer.Dal.Entities.ApplicationRequest;
+namespace StudentTransfer.Dal.Entities.Application;
 
-public class Direction : Entity
+public class Direction
 {
+    public int Id { get; set; }
+    
     public string Code { get; init; } = null!;
     
     public string Name { get; init; } = null!;
