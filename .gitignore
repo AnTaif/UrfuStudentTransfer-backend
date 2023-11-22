@@ -4,5 +4,3 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 *.xml
-*.env
-StudentTransfer.Api/.env

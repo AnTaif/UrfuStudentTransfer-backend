@@ -19,7 +19,7 @@ public class ApplicationService : IApplicationService
     
     public async Task<List<ApplicationDto>> GetAllAsync()
     {
-        var applications =  await _context.Applications.Include(a => a.Direction).ToListAsync();
+        var applications =  await _context.Applications.Include(a => a.Files).Include(a => a.Direction).ToListAsync();
         var dtos = applications.Select(a => a.ToDto()).ToList();
 
         return dtos;
@@ -36,8 +36,6 @@ public class ApplicationService : IApplicationService
 
     public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, List<FileDto> fileDtos)
     {
-        //TODO: Save files
-
         var files = fileDtos.Select(f => f.ToEntity()).ToList();
 
         var vacantDirection = _context.VacantList.First(v => v.Id == request.DirectionId);

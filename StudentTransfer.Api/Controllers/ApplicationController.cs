@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Bll.Services.Application;
-using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Utils.Dto.Application;
 
 namespace StudentTransfer.Api.Controllers;
