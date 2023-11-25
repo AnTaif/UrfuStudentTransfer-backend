@@ -1,6 +1,7 @@
 using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Utils.Dto.Application;
+using StudentTransfer.Utils.Dto.File;
 
 namespace StudentTransfer.Bll.Services.Application;
 
@@ -16,7 +17,7 @@ public interface IApplicationService
 
     Task<List<ApplicationDto>> GetByStatusAsync(Status status);
 
-    Task DeleteAsync(ApplicationDto application);
+    Task<bool> TryDeleteAsync(int id);
 
-    Task UpdateAsync(ApplicationDto application);
+    Task<bool> TryUpdateAsync(ApplicationDto application);
 }

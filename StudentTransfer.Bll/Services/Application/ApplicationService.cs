@@ -4,7 +4,7 @@ using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Utils.Dto.Application;
-using File = System.IO.File;
+using StudentTransfer.Utils.Dto.File;
 
 namespace StudentTransfer.Bll.Services.Application;
 
@@ -27,7 +27,10 @@ public class ApplicationService : IApplicationService
 
     public async Task<ApplicationDto?> GetByIdAsync(int id)
     {
-        var application = await _context.Applications.FirstOrDefaultAsync(a => a.Id == id);
+        var application = await _context.Applications
+            .Include(a => a.Files)
+            .Include(a => a.Direction)
+            .FirstOrDefaultAsync(a => a.Id == id);
 
         var dto = application?.ToDto();
 
@@ -82,12 +85,20 @@ public class ApplicationService : IApplicationService
         return dtos;
     }
 
-    public Task DeleteAsync(ApplicationDto application)
+    public async Task<bool> TryDeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var application = await _context.Applications.FindAsync(id);
+
+        if (application == null)
+            return false;
+            
+        _context.Applications.Remove(application);
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 
-    public Task UpdateAsync(ApplicationDto application)
+    public async Task<bool> TryUpdateAsync(ApplicationDto application)
     {
         throw new NotImplementedException();
     }

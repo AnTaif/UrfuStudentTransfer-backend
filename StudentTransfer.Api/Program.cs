@@ -1,3 +1,4 @@
+using Microsoft.Extensions.FileProviders;
 using StudentTransfer.Dal;
 using StudentTransfer.Bll;
 
@@ -31,10 +32,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors("OpenPolicy");
 
+app.UseStaticFiles();
+
 app.UseAuthorization();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+    RequestPath = "/uploads"
+});
 
 app.MapControllers();
 

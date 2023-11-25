@@ -1,6 +1,7 @@
 using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Utils.Dto;
 using StudentTransfer.Utils.Dto.Application;
+using StudentTransfer.Utils.Dto.File;
 
 namespace StudentTransfer.Bll.Mappers.Application;
 
@@ -13,7 +14,7 @@ public static class FileMapper
             Id = fileEntity.Id,
             Name = fileEntity.Name,
             Extension = fileEntity.Extension,
-            Path = fileEntity.Path,
+            Path = $"uploads/{fileEntity.Id}{fileEntity.Extension}",
             UploadDate = fileEntity.UploadTime
         };
     }

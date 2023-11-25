@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Bll.Services.Application;
 using StudentTransfer.Utils.Dto.Application;
+using StudentTransfer.Utils.Dto.File;
 
 namespace StudentTransfer.Api.Controllers;
 
 [ApiController]
-[Route("api/application")]
+[Route("api/applications")]
 public class ApplicationController : ControllerBase
 {
     private readonly IApplicationService _service;
@@ -34,7 +35,8 @@ public class ApplicationController : ControllerBase
         foreach (var formFile in formFiles)
         {
             var fileId = Guid.NewGuid();
-            var filePath = Path.Combine(fileRootPath, fileId.ToString());
+            var extension = Path.GetExtension(formFile.FileName);
+            var filePath = Path.Combine(fileRootPath, fileId + extension);
 
             await using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
@@ -44,11 +46,11 @@ public class ApplicationController : ControllerBase
             var fileDto = new FileDto
             {
                 Id = fileId,
-                //OwnerId = Guid.NewGuid(), //TODO: UserId
+                OwnerId = Guid.NewGuid(),
                 Name = formFile.FileName,
-                Extension = Path.GetExtension(formFile.FileName),
+                Extension = extension,
                 Path = filePath,
-                UploadDate = DateTime.UtcNow //TODO: Change to local timestamp?
+                UploadDate = DateTime.UtcNow
             };
             
             fileDtos.Add(fileDto);
@@ -56,6 +58,92 @@ public class ApplicationController : ControllerBase
         
         var dto = await _service.CreateAsync(applicationRequest, fileDtos);
 
-        return Ok(dto);
+        return CreatedAtAction("AddApplication", dto);
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<IActionResult> DeleteApplication(int id)
+    {
+        var applicationDto = await _service.GetByIdAsync(id);
+
+        if (applicationDto == null)
+            return NotFound();
+        
+        var files = applicationDto.Files;
+        
+        var success = await _service.TryDeleteAsync(id);
+        if (files != null)
+            foreach (var file in files.Where(file => System.IO.File.Exists(file.Path)))
+            {
+                System.IO.File.Delete(file.Path);
+            }
+
+        if (success)
+            return Ok();
+        return NotFound();
+    }
+
+    [HttpGet("{applicationId}/files")]
+    public async Task<IActionResult> GetApplicationFiles(int applicationId)
+    {
+        var applicationDto = await _service.GetByIdAsync(applicationId);
+
+        if (applicationDto == null)
+            return NotFound();
+
+        return Ok(applicationDto.Files);
+    }
+
+    // [HttpPost("{applicationId}/files")]
+    // public async Task<IActionResult> UploadApplicationFile(List<IFormFile> formFiles, int applicationId)
+    // {
+    //     var application = await _service.GetByIdAsync(applicationId);
+    //
+    //     if (application == null)
+    //         return NotFound();
+    //     
+    //     var fileRootPath = Path.Combine(_hostEnvironment.ContentRootPath, "Uploads");
+    //     Directory.CreateDirectory(fileRootPath);
+    //
+    //     var fileDtos = new List<FileDto>();
+    //     
+    //     foreach (var formFile in formFiles)
+    //     {
+    //         var fileId = Guid.NewGuid();
+    //         var extension = Path.GetExtension(formFile.FileName);
+    //         var filePath = Path.Combine(fileRootPath, fileId + extension);
+    //
+    //         await using (var fileStream = new FileStream(filePath, FileMode.Create))
+    //         {
+    //             await formFile.CopyToAsync(fileStream);
+    //         }
+    //
+    //         var fileDto = new FileDto
+    //         {
+    //             Id = fileId,
+    //             OwnerId = Guid.NewGuid(),
+    //             Name = formFile.FileName,
+    //             Extension = extension,
+    //             Path = filePath,
+    //             UploadDate = DateTime.UtcNow
+    //         };
+    //         
+    //         fileDtos.Add(fileDto);
+    //     }
+    // }
+
+    [HttpGet("{applicationId}/files/{id}")]
+    public async Task<IActionResult> GetApplicationFileById(int applicationId, Guid id)
+    {
+        var applicationDto = await _service.GetByIdAsync(applicationId);
+        var fileDto = applicationDto?.Files?.FirstOrDefault(f => f.Id == id);
+        
+        if (fileDto == null)
+            return NotFound();
+        
+        var filePath = fileDto.Path;
+        
+        return PhysicalFile(filePath, "application/octet-stream", fileDto.Name);
     }
 }

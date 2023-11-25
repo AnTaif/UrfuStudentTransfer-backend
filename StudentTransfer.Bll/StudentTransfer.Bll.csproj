@@ -12,4 +12,8 @@
       <ProjectReference Include="..\StudentTransfer.VacantParser\StudentTransfer.VacantParser.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Services\File\" />
+    </ItemGroup>
+
 </Project>
