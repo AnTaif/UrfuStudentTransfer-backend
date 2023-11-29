@@ -42,6 +42,8 @@ app.UseStaticFiles();
 
 app.UseAuthorization();
 
+Directory.CreateDirectory(Path.Combine(app.Environment.ContentRootPath, "Uploads"));
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
