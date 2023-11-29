@@ -69,6 +69,24 @@ public class ApplicationService : IApplicationService
         return application.ToDto();
     }
 
+    // TODO: fix error http://go.microsoft.com/fwlink/?LinkId=527962
+    // public async Task<List<FileDto>?> UploadFilesAsync(int applicationId, List<FileDto> fileDtos)
+    // {
+    //     var application = await _context.Applications.Include(applicationEntity => applicationEntity.Files).FirstOrDefaultAsync(a => a.Id == applicationId);
+    //     if (application == null)
+    //         return null;
+    //     
+    //     var files = fileDtos.Select(f => f.ToEntity()).ToList();
+    //
+    //     foreach (var file in files)
+    //     {
+    //         application.Files?.Add(file);   
+    //     }
+    //
+    //     await _context.SaveChangesAsync(); // TODO: fix error http://go.microsoft.com/fwlink/?LinkId=527962
+    //     return files.Select(f => f.ToDto()).ToList();
+    // }
+
     public async Task<List<ApplicationDto>> GetActiveAsync()
     {
         var activeApplications = await _context.Applications.Where(a => a.IsActive).ToListAsync();

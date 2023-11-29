@@ -15,8 +15,8 @@ public class ApplicationEntity
     
     public virtual List<ApplicationStatus>? Updates { get; set; }
     
-    public List<FileEntity>? Files { get; set; }
-    
+    public List<FileEntity>? Files { get; set; } //TODO: change to = null!
+
     public DateTime InitialDate { get; set; }
     
     public int DirectionId { get; set; }

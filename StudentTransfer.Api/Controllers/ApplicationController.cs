@@ -95,18 +95,14 @@ public class ApplicationController : ControllerBase
         return Ok(applicationDto.Files);
     }
 
+    // TODO: fix error http://go.microsoft.com/fwlink/?LinkId=527962
     // [HttpPost("{applicationId}/files")]
     // public async Task<IActionResult> UploadApplicationFile(List<IFormFile> formFiles, int applicationId)
     // {
-    //     var application = await _service.GetByIdAsync(applicationId);
-    //
-    //     if (application == null)
-    //         return NotFound();
-    //     
     //     var fileRootPath = Path.Combine(_hostEnvironment.ContentRootPath, "Uploads");
     //     Directory.CreateDirectory(fileRootPath);
     //
-    //     var fileDtos = new List<FileDto>();
+    //     var fileUploadDtos = new List<FileDto>();
     //     
     //     foreach (var formFile in formFiles)
     //     {
@@ -129,8 +125,17 @@ public class ApplicationController : ControllerBase
     //             UploadDate = DateTime.UtcNow
     //         };
     //         
-    //         fileDtos.Add(fileDto);
+    //         fileUploadDtos.Add(fileDto);
     //     }
+    //
+    //     var fileDtos = await _service.UploadFilesAsync(applicationId, fileUploadDtos);
+    //
+    //     if (fileDtos == null)
+    //     {
+    //         return NotFound();
+    //     }
+    //     
+    //     return CreatedAtAction("UploadApplicationFile", fileDtos);
     // }
 
     [HttpGet("{applicationId}/files/{id}")]

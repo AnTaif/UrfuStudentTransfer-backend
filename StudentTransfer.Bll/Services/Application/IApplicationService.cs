@@ -13,6 +13,8 @@ public interface IApplicationService
 
     Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, List<FileDto> fileDtos);
 
+    //Task<List<FileDto>?> UploadFilesAsync(int applicationId, List<FileDto> fileDtos); // TODO: fix error
+    
     Task<List<ApplicationDto>> GetActiveAsync();
 
     Task<List<ApplicationDto>> GetByStatusAsync(Status status);
