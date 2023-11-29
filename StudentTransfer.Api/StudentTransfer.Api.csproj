@@ -22,23 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Uploads\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Uploads\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Remove="Uploads\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Uploads\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Vacant\" />
+      <Folder Include="Uploads\" />
     </ItemGroup>
 
 </Project>
