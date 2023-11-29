@@ -9,7 +9,8 @@ public static class DependencyInjectionHelper
     {
         services.AddDbContext<StudentTransferContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseInMemoryDatabase("StudentTransferInMemoryDB");
+            //options.UseNpgsql(connectionString);
         });
 
         return services;

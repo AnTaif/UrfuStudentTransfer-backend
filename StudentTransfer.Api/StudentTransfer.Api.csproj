@@ -37,4 +37,8 @@
       <None Remove="Uploads\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Vacant\" />
+    </ItemGroup>
+
 </Project>

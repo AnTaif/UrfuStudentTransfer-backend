@@ -14,6 +14,10 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+    });
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -32,7 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("OpenPolicy");
+app.UseCors("FrontendPolicy");
 
 app.UseStaticFiles();
 
