@@ -3,7 +3,7 @@ namespace StudentTransfer.Dal.Entities.Enums;
 public enum Status
 {
     Sent = 0,
-    InProgress = 1,    
+    InProgress = 1, //TODO: Админ открыл заявку или скачал файл??? 
     Accepted = 2,
     Rejected = 3
 }

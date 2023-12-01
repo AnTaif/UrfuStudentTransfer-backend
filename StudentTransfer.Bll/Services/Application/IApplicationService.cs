@@ -11,9 +11,13 @@ public interface IApplicationService
     
     Task<ApplicationDto?> GetByIdAsync(int id);
 
-    Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, List<FileDto> fileDtos);
+    Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, IEnumerable<FileDto> fileDtos);
+
+    Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationRequest request);
 
     //Task<List<FileDto>?> UploadFilesAsync(int applicationId, List<FileDto> fileDtos); // TODO: fix error
+
+    Task ChangeStatusAsync(int applicationId, Status newStatus);
     
     Task<List<ApplicationDto>> GetActiveAsync();
 

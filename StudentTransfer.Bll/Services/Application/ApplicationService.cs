@@ -37,7 +37,7 @@ public class ApplicationService : IApplicationService
         return dto;
     }
 
-    public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, List<FileDto> fileDtos)
+    public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, IEnumerable<FileDto> fileDtos)
     {
         var files = fileDtos.Select(f => f.ToEntity()).ToList();
 
@@ -67,6 +67,46 @@ public class ApplicationService : IApplicationService
         await _context.SaveChangesAsync();
 
         return application.ToDto();
+    }
+
+    public async Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationRequest request)
+    {
+        var application = await _context.Applications.Include(a => a.Files).Include(a => a.Direction).FirstOrDefaultAsync(a => a.Id == id);
+
+        if (application == null)
+            return null;
+
+        if (request.Type != null)
+            application.Type = request.Type.MapToApplicationType();
+
+        if (request.Status != null)
+            application.CurrentStatus = request.Status.MapToStatus();
+
+        if (request.DirectionId != null)
+        {
+            var vacantDirection = await _context.VacantList.FirstOrDefaultAsync(v => v.Id == request.DirectionId);
+
+            if (vacantDirection == null)
+                return null;
+                
+            var direction = new Direction
+            {
+                Code = vacantDirection.Code,
+                Name = vacantDirection.Name,
+                Level = vacantDirection.Level,
+                Course = vacantDirection.Course,
+                Form = vacantDirection.Form
+            };
+            
+            application.Direction = direction;
+        }
+
+        return application.ToDto();
+    }
+
+    public Task ChangeStatusAsync(int applicationId, Status newStatus)
+    {
+        throw new NotImplementedException();
     }
 
     // TODO: fix error http://go.microsoft.com/fwlink/?LinkId=527962

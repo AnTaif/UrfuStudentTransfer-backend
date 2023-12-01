@@ -15,11 +15,12 @@ public class ApplicationEntity
     
     public virtual List<ApplicationStatus>? Updates { get; set; }
     
-    public List<FileEntity>? Files { get; set; } //TODO: change to = null!
+    public List<FileEntity>? Files { get; set; }
 
     public DateTime InitialDate { get; set; }
     
     public int DirectionId { get; set; }
+    
     public virtual Direction Direction { get; set; } = null!;
 
     public bool IsActive { get; set; }

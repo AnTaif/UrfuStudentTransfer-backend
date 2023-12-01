@@ -22,8 +22,22 @@ public class ApplicationDto
     public bool IsActive { get; set; }
 }
 
-public record CreateApplicationRequest(
-    int UserId, 
-    string Type,
-    DateTime Date, 
-    int DirectionId);
+public class CreateApplicationRequest
+{
+    public int UserId { get; set; }
+    
+    public string Type { get; set; } = null!;
+    
+    public DateTime Date { get; set; }
+    
+    public int DirectionId { get; set; }
+}
+
+public class UpdateApplicationRequest
+{
+    public string? Type { get; set; }
+    
+    public string? Status { get; set; }
+
+    public int? DirectionId { get; set; }
+} 

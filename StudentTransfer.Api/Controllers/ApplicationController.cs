@@ -61,19 +61,31 @@ public class ApplicationController : ControllerBase
         return CreatedAtAction("AddApplication", dto);
     }
 
+    [HttpPut]
+    [Route("{id}")]
+    public async Task<IActionResult> UpdateApplication(UpdateApplicationRequest request, int id)
+    {
+        var dto = await _service.UpdateAsync(id, request);
+
+        if (dto == null)
+            return NotFound();
+
+        return Ok(dto);
+    }
+
     [HttpDelete]
     [Route("{id}")]
     public async Task<IActionResult> DeleteApplication(int id)
     {
         var applicationDto = await _service.GetByIdAsync(id);
-
         if (applicationDto == null)
             return NotFound();
         
+        var success = await _service.TryDeleteAsync(id);
+        
         var files = applicationDto.Files;
         
-        var success = await _service.TryDeleteAsync(id);
-        if (files != null)
+        if (success && files != null)
             foreach (var file in files.Where(file => System.IO.File.Exists(file.Path)))
             {
                 System.IO.File.Delete(file.Path);
