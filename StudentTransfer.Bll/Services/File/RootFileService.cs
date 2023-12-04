@@ -16,7 +16,15 @@ public class RootFileService : IFileService
         _rootPath = rootPath;
     }
 
-    public async Task<List<FileDto>> UploadFileAsync(List<UploadFileRequest> fileRequests)
+    public async Task<List<FileDto>> GetAllByApplicationAsync(int applicationId)
+    {
+        var files = await _context.Files.Where(f => f.ApplicationEntityId == applicationId).ToListAsync();
+        var dtos = files.Select(f => f.ToDto()).ToList();
+
+        return dtos;
+    }
+    
+    public async Task<List<FileDto>> UploadAsync(List<UploadFileRequest> fileRequests)
     {
         var fileDtos = new List<FileDto>();
         
@@ -50,7 +58,7 @@ public class RootFileService : IFileService
         return fileDtos;
     }
 
-    public async Task<FileDto?> GetFileAsync(Guid id)
+    public async Task<FileDto?> GetAsync(Guid id)
     {
         var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id);
 
@@ -58,12 +66,12 @@ public class RootFileService : IFileService
         return fileDto;
     }
 
-    public async Task<FileDto?> DeleteAsync(Guid id)
+    public async Task<bool> TryDeleteAsync(Guid id)
     {
         var fileEntity = await _context.Files.FirstOrDefaultAsync(f => f.Id == id);
 
         if (fileEntity == null)
-            return null;
+            return false;
         
         _context.Files.Remove(fileEntity);
         
@@ -71,6 +79,6 @@ public class RootFileService : IFileService
             System.IO.File.Delete(fileEntity.Path);
         
         await _context.SaveChangesAsync();
-        return fileEntity.ToDto();
+        return true;
     }
 }

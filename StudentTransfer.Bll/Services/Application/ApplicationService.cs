@@ -66,63 +66,10 @@ public class ApplicationService : IApplicationService
         return application.ToDto();
     }
 
-    public async Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationRequest request)
-    {
-        var application = await _context.Applications.Include(a => a.Files).Include(a => a.Direction).FirstOrDefaultAsync(a => a.Id == id);
-
-        if (application == null)
-            return null;
-
-        if (request.Type != null)
-            application.Type = request.Type.MapToApplicationType();
-
-        if (request.Status != null)
-            application.CurrentStatus = request.Status.MapToStatus();
-
-        if (request.DirectionId != null)
-        {
-            var vacantDirection = await _context.VacantList.FirstOrDefaultAsync(v => v.Id == request.DirectionId);
-
-            if (vacantDirection == null)
-                return null;
-                
-            var direction = new Direction
-            {
-                Code = vacantDirection.Code,
-                Name = vacantDirection.Name,
-                Level = vacantDirection.Level,
-                Course = vacantDirection.Course,
-                Form = vacantDirection.Form
-            };
-            
-            application.Direction = direction;
-        }
-
-        return application.ToDto();
-    }
-
     public Task ChangeStatusAsync(int applicationId, Status newStatus)
     {
         throw new NotImplementedException();
     }
-
-    // TODO: fix error http://go.microsoft.com/fwlink/?LinkId=527962
-    // public async Task<List<FileDto>?> UploadFilesAsync(int applicationId, List<FileDto> fileDtos)
-    // {
-    //     var application = await _context.Applications.Include(applicationEntity => applicationEntity.Files).FirstOrDefaultAsync(a => a.Id == applicationId);
-    //     if (application == null)
-    //         return null;
-    //     
-    //     var files = fileDtos.Select(f => f.ToEntity()).ToList();
-    //
-    //     foreach (var file in files)
-    //     {
-    //         application.Files?.Add(file);   
-    //     }
-    //
-    //     await _context.SaveChangesAsync(); // TODO: fix error http://go.microsoft.com/fwlink/?LinkId=527962
-    //     return files.Select(f => f.ToDto()).ToList();
-    // }
 
     public async Task<List<ApplicationDto>> GetActiveAsync()
     {
@@ -152,10 +99,41 @@ public class ApplicationService : IApplicationService
 
         return true;
     }
-
-    public async Task<bool> TryUpdateAsync(ApplicationDto applicationDto)
+    
+    public async Task<bool> TryUpdateAsync(int id, UpdateApplicationRequest request)
     {
-        var application = await _context.Applications.FirstOrDefaultAsync(a => a.Id == applicationDto.Id);
-        throw new NotImplementedException();
+        var application = await _context.Applications.Include(a => a.Files).Include(a => a.Direction).FirstOrDefaultAsync(a => a.Id == id);
+
+        if (application == null)
+            return false;
+
+        if (request.Type != null)
+            application.Type = request.Type.MapToApplicationType();
+
+        if (request.Status != null)
+            application.CurrentStatus = request.Status.MapToStatus();
+
+        if (request.DirectionId != null)
+        {
+            var vacantDirection = await _context.VacantList.FirstOrDefaultAsync(v => v.Id == request.DirectionId);
+
+            if (vacantDirection == null)
+                return false;
+                
+            var direction = new Direction
+            {
+                Code = vacantDirection.Code,
+                Name = vacantDirection.Name,
+                Level = vacantDirection.Level,
+                Course = vacantDirection.Course,
+                Form = vacantDirection.Form
+            };
+            
+            application.Direction = direction;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 }

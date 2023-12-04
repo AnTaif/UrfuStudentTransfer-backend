@@ -34,7 +34,7 @@ public class ApplicationController : ControllerBase
         var fileRequests = formFiles
             .Select(formFile => new UploadFileRequest(formFile.FileName, dto.Id, formFile.OpenReadStream())).ToList();
 
-        var fileDtos = await _fileService.UploadFileAsync(fileRequests);
+        var fileDtos = await _fileService.UploadAsync(fileRequests);
         dto.Files = fileDtos;
 
         return CreatedAtAction("AddApplication", dto);
@@ -44,12 +44,11 @@ public class ApplicationController : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> UpdateApplication(UpdateApplicationRequest request, int id)
     {
-        var dto = await _service.UpdateAsync(id, request);
+        var success = await _service.TryUpdateAsync(id, request);
 
-        if (dto == null)
-            return NotFound();
-
-        return Ok(dto);
+        if (success)
+            return NoContent();
+        return NotFound();
     }
 
     [HttpDelete]
@@ -67,61 +66,11 @@ public class ApplicationController : ControllerBase
         if (success && files != null)
             foreach (var file in files)
             {
-                await _fileService.DeleteAsync(file.Id);
+                await _fileService.TryDeleteAsync(file.Id);
             }
-            
-
+        
         if (success)
             return NoContent();
         return NotFound();
-    }
-
-    [HttpGet("{applicationId}/files")]
-    public async Task<IActionResult> GetApplicationFiles(int applicationId)
-    {
-        var applicationDto = await _service.GetByIdAsync(applicationId);
-
-        if (applicationDto == null)
-            return NotFound();
-
-        return Ok(applicationDto.Files);
-    }
-
-    [HttpPost("{applicationId}/files")]
-    public async Task<IActionResult> UploadApplicationFile(List<IFormFile> formFiles, int applicationId)
-    {
-        var fileRequests = formFiles
-            .Select(formFile => new UploadFileRequest(formFile.FileName, applicationId, formFile.OpenReadStream())).ToList();
-
-        var fileDtos = await _fileService.UploadFileAsync(fileRequests);
-
-        if (fileDtos.Count == 0)
-            return NotFound();
-        
-        return CreatedAtAction("UploadApplicationFile", fileDtos);
-    }
-
-    [HttpDelete("{applicationId}/files/{id}")]
-    public async Task<IActionResult> DeleteApplicationFileById(int applicationId, Guid id)
-    {
-        var fileDto = await _fileService.DeleteAsync(id);
-
-        if (fileDto == null)
-            return NotFound();
-        return Ok(fileDto);
-    }
-
-    [HttpGet("{applicationId}/files/{id}")]
-    public async Task<IActionResult> GetApplicationFileById(int applicationId, Guid id)
-    {
-        var applicationDto = await _service.GetByIdAsync(applicationId);
-        var fileDto = applicationDto?.Files?.FirstOrDefault(f => f.Id == id);
-        
-        if (fileDto == null)
-            return NotFound();
-        
-        var filePath = fileDto.Path;
-        
-        return PhysicalFile(filePath, "application/octet-stream", fileDto.Name);
     }
 }

@@ -13,10 +13,6 @@ public interface IApplicationService
 
     Task<ApplicationDto> CreateAsync(CreateApplicationRequest request);
 
-    Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationRequest request);
-
-    //Task<List<FileDto>?> UploadFilesAsync(int applicationId, List<FileDto> fileDtos); // TODO: fix error
-
     Task ChangeStatusAsync(int applicationId, Status newStatus);
     
     Task<List<ApplicationDto>> GetActiveAsync();
@@ -25,5 +21,5 @@ public interface IApplicationService
 
     Task<bool> TryDeleteAsync(int id);
 
-    Task<bool> TryUpdateAsync(ApplicationDto application);
+    Task<bool> TryUpdateAsync(int id, UpdateApplicationRequest request);
 }
