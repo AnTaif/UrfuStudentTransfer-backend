@@ -12,7 +12,14 @@ public class StudentTransferContext : DbContext
 
         public DbSet<ApplicationEntity> Applications { get; set; } = null!;
 
+        public DbSet<FileEntity> Files { get; set; } = null!;
+
         public StudentTransferContext(DbContextOptions<StudentTransferContext> options) : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
+
 }

@@ -37,10 +37,8 @@ public class ApplicationService : IApplicationService
         return dto;
     }
 
-    public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, IEnumerable<FileDto> fileDtos)
+    public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request)
     {
-        var files = fileDtos.Select(f => f.ToEntity()).ToList();
-
         var vacantDirection = _context.VacantList.First(v => v.Id == request.DirectionId);
         var direction = new Direction
         {
@@ -57,7 +55,6 @@ public class ApplicationService : IApplicationService
             UserId = request.UserId,
             CurrentStatus = Status.Sent,
             Updates = null,
-            Files = files,
             InitialDate = request.Date.ToUniversalTime(),
             Direction = direction,
             IsActive = true
@@ -156,8 +153,9 @@ public class ApplicationService : IApplicationService
         return true;
     }
 
-    public async Task<bool> TryUpdateAsync(ApplicationDto application)
+    public async Task<bool> TryUpdateAsync(ApplicationDto applicationDto)
     {
+        var application = await _context.Applications.FirstOrDefaultAsync(a => a.Id == applicationDto.Id);
         throw new NotImplementedException();
     }
 }

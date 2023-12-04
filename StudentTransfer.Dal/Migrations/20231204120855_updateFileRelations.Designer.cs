@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentTransfer.Dal;
@@ -11,9 +12,11 @@ using StudentTransfer.Dal;
 namespace StudentTransfer.Dal.Migrations
 {
     [DbContext(typeof(StudentTransferContext))]
-    partial class StudentTransferContextModelSnapshot : ModelSnapshot
+    [Migration("20231204120855_updateFileRelations")]
+    partial class updateFileRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,7 +121,10 @@ namespace StudentTransfer.Dal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ApplicationEntityId")
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ApplicationId1")
                         .HasColumnType("integer");
 
                     b.Property<string>("Extension")
@@ -136,9 +142,11 @@ namespace StudentTransfer.Dal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationEntityId");
+                    b.HasIndex("ApplicationId");
 
-                    b.ToTable("Files");
+                    b.HasIndex("ApplicationId1");
+
+                    b.ToTable("FileEntity");
                 });
 
             modelBuilder.Entity("StudentTransfer.Dal.Entities.Vacant.VacantDirection", b =>
@@ -205,9 +213,17 @@ namespace StudentTransfer.Dal.Migrations
                 {
                     b.HasOne("StudentTransfer.Dal.Entities.Application.ApplicationEntity", null)
                         .WithMany("Files")
-                        .HasForeignKey("ApplicationEntityId")
+                        .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("StudentTransfer.Dal.Entities.Application.ApplicationEntity", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
                 });
 
             modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.ApplicationEntity", b =>

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Bll.Services.Application;
+using StudentTransfer.Bll.Services.File;
 using StudentTransfer.Utils.Dto.Application;
 using StudentTransfer.Utils.Dto.File;
 
@@ -10,12 +11,12 @@ namespace StudentTransfer.Api.Controllers;
 public class ApplicationController : ControllerBase
 {
     private readonly IApplicationService _service;
-    private readonly IWebHostEnvironment _hostEnvironment;
+    private readonly IFileService _fileService;
 
-    public ApplicationController(IApplicationService service, IWebHostEnvironment hostEnvironment)
+    public ApplicationController(IApplicationService service, IFileService fileService)
     {
         _service = service;
-        _hostEnvironment = hostEnvironment;
+        _fileService = fileService;
     }
 
     [HttpGet]
@@ -27,36 +28,13 @@ public class ApplicationController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddApplication([FromForm]CreateApplicationRequest applicationRequest, List<IFormFile> formFiles)
     {
-        var fileRootPath = Path.Combine(_hostEnvironment.ContentRootPath, "Uploads");
-        Directory.CreateDirectory(fileRootPath);
-
-        var fileDtos = new List<FileDto>();
         
-        foreach (var formFile in formFiles)
-        {
-            var fileId = Guid.NewGuid();
-            var extension = Path.GetExtension(formFile.FileName);
-            var filePath = Path.Combine(fileRootPath, fileId + extension);
-
-            await using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await formFile.CopyToAsync(fileStream);
-            }
-
-            var fileDto = new FileDto
-            {
-                Id = fileId,
-                OwnerId = Guid.NewGuid(),
-                Name = formFile.FileName,
-                Extension = extension,
-                Path = filePath,
-                UploadDate = DateTime.UtcNow
-            };
-            
-            fileDtos.Add(fileDto);
-        }
+        var dto = await _service.CreateAsync(applicationRequest);
         
-        var dto = await _service.CreateAsync(applicationRequest, fileDtos);
+        var fileRequests = formFiles
+            .Select(formFile => new UploadFileRequest(formFile.FileName, dto.Id, formFile.OpenReadStream())).ToList();
+
+        var fileDtos = await _fileService.UploadFileAsync(fileRequests);
 
         return CreatedAtAction("AddApplication", dto);
     }
@@ -84,12 +62,9 @@ public class ApplicationController : ControllerBase
         var success = await _service.TryDeleteAsync(id);
         
         var files = applicationDto.Files;
-        
+
         if (success && files != null)
-            foreach (var file in files.Where(file => System.IO.File.Exists(file.Path)))
-            {
-                System.IO.File.Delete(file.Path);
-            }
+            _fileService.Delete(files);
 
         if (success)
             return Ok();

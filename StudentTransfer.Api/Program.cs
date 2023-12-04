@@ -25,7 +25,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // Add layers
 builder.Services
     .AddDataLayer(connectionString!)
-    .AddLogicLayer();
+    .AddLogicLayer(builder.Environment.ContentRootPath);
 
 var app = builder.Build();
 

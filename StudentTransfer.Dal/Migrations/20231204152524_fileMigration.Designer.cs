@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentTransfer.Dal;
@@ -11,9 +12,11 @@ using StudentTransfer.Dal;
 namespace StudentTransfer.Dal.Migrations
 {
     [DbContext(typeof(StudentTransferContext))]
-    partial class StudentTransferContextModelSnapshot : ModelSnapshot
+    [Migration("20231204152524_fileMigration")]
+    partial class fileMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,6 +124,9 @@ namespace StudentTransfer.Dal.Migrations
                     b.Property<int>("ApplicationEntityId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Extension")
                         .HasColumnType("text");
 
@@ -137,6 +143,8 @@ namespace StudentTransfer.Dal.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationEntityId");
+
+                    b.HasIndex("ApplicationId");
 
                     b.ToTable("Files");
                 });
@@ -208,6 +216,14 @@ namespace StudentTransfer.Dal.Migrations
                         .HasForeignKey("ApplicationEntityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("StudentTransfer.Dal.Entities.Application.ApplicationEntity", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
                 });
 
             modelBuilder.Entity("StudentTransfer.Dal.Entities.Application.ApplicationEntity", b =>

@@ -11,7 +11,7 @@ public interface IApplicationService
     
     Task<ApplicationDto?> GetByIdAsync(int id);
 
-    Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, IEnumerable<FileDto> fileDtos);
+    Task<ApplicationDto> CreateAsync(CreateApplicationRequest request);
 
     Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationRequest request);
 

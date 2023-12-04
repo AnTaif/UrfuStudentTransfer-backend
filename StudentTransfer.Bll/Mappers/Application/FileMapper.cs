@@ -13,8 +13,9 @@ public static class FileMapper
         {
             Id = fileEntity.Id,
             Name = fileEntity.Name,
+            ApplicationId = fileEntity.ApplicationEntityId,
             Extension = fileEntity.Extension,
-            Path = $"uploads/{fileEntity.Id}{fileEntity.Extension}",
+            Path = $"uploads/{fileEntity.Id}{fileEntity.Extension}", // relative api path to the file
             UploadDate = fileEntity.UploadTime
         };
     }
@@ -26,6 +27,7 @@ public static class FileMapper
             Id = dto.Id,
             Name = dto.Name,
             Extension = dto.Extension,
+            ApplicationEntityId = dto.ApplicationId,
             Path = dto.Path,
             UploadTime = dto.UploadDate
         };

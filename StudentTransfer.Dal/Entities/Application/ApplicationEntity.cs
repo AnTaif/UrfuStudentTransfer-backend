@@ -20,7 +20,6 @@ public class ApplicationEntity
     public DateTime InitialDate { get; set; }
     
     public int DirectionId { get; set; }
-    
     public virtual Direction Direction { get; set; } = null!;
 
     public bool IsActive { get; set; }

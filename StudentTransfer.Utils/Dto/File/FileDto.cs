@@ -8,6 +8,8 @@ public class FileDto
 
     public Guid OwnerId { get; set; } = new Guid();
     
+    public int ApplicationId { get; set; }
+    
     public string? Name { get; set; }
     
     public string? Extension { get; set; }
@@ -17,4 +19,4 @@ public class FileDto
     public DateTime UploadDate { get; set; }
 }
 
-public record UploadFileRequest(string Name, string Extension, Stream Stream);
+public record UploadFileRequest(string FileName, int ApplicationId, Stream Stream);
