@@ -22,4 +22,8 @@
       <ProjectReference Include="..\StudentTransfer.Utils\StudentTransfer.Utils.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Uploads\" />
+    </ItemGroup>
+
 </Project>

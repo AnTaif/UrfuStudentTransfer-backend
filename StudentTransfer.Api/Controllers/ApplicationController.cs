@@ -35,6 +35,7 @@ public class ApplicationController : ControllerBase
             .Select(formFile => new UploadFileRequest(formFile.FileName, dto.Id, formFile.OpenReadStream())).ToList();
 
         var fileDtos = await _fileService.UploadFileAsync(fileRequests);
+        dto.Files = fileDtos;
 
         return CreatedAtAction("AddApplication", dto);
     }
@@ -64,10 +65,14 @@ public class ApplicationController : ControllerBase
         var files = applicationDto.Files;
 
         if (success && files != null)
-            _fileService.Delete(files);
+            foreach (var file in files)
+            {
+                await _fileService.DeleteAsync(file.Id);
+            }
+            
 
         if (success)
-            return Ok();
+            return NoContent();
         return NotFound();
     }
 
@@ -82,48 +87,29 @@ public class ApplicationController : ControllerBase
         return Ok(applicationDto.Files);
     }
 
-    // TODO: fix error http://go.microsoft.com/fwlink/?LinkId=527962
-    // [HttpPost("{applicationId}/files")]
-    // public async Task<IActionResult> UploadApplicationFile(List<IFormFile> formFiles, int applicationId)
-    // {
-    //     var fileRootPath = Path.Combine(_hostEnvironment.ContentRootPath, "Uploads");
-    //     Directory.CreateDirectory(fileRootPath);
-    //
-    //     var fileUploadDtos = new List<FileDto>();
-    //     
-    //     foreach (var formFile in formFiles)
-    //     {
-    //         var fileId = Guid.NewGuid();
-    //         var extension = Path.GetExtension(formFile.FileName);
-    //         var filePath = Path.Combine(fileRootPath, fileId + extension);
-    //
-    //         await using (var fileStream = new FileStream(filePath, FileMode.Create))
-    //         {
-    //             await formFile.CopyToAsync(fileStream);
-    //         }
-    //
-    //         var fileDto = new FileDto
-    //         {
-    //             Id = fileId,
-    //             OwnerId = Guid.NewGuid(),
-    //             Name = formFile.FileName,
-    //             Extension = extension,
-    //             Path = filePath,
-    //             UploadDate = DateTime.UtcNow
-    //         };
-    //         
-    //         fileUploadDtos.Add(fileDto);
-    //     }
-    //
-    //     var fileDtos = await _service.UploadFilesAsync(applicationId, fileUploadDtos);
-    //
-    //     if (fileDtos == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //     
-    //     return CreatedAtAction("UploadApplicationFile", fileDtos);
-    // }
+    [HttpPost("{applicationId}/files")]
+    public async Task<IActionResult> UploadApplicationFile(List<IFormFile> formFiles, int applicationId)
+    {
+        var fileRequests = formFiles
+            .Select(formFile => new UploadFileRequest(formFile.FileName, applicationId, formFile.OpenReadStream())).ToList();
+
+        var fileDtos = await _fileService.UploadFileAsync(fileRequests);
+
+        if (fileDtos.Count == 0)
+            return NotFound();
+        
+        return CreatedAtAction("UploadApplicationFile", fileDtos);
+    }
+
+    [HttpDelete("{applicationId}/files/{id}")]
+    public async Task<IActionResult> DeleteApplicationFileById(int applicationId, Guid id)
+    {
+        var fileDto = await _fileService.DeleteAsync(id);
+
+        if (fileDto == null)
+            return NotFound();
+        return Ok(fileDto);
+    }
 
     [HttpGet("{applicationId}/files/{id}")]
     public async Task<IActionResult> GetApplicationFileById(int applicationId, Guid id)

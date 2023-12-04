@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Bll.Mappers.Application;
 using StudentTransfer.Dal;
 using StudentTransfer.Utils.Dto.File;
@@ -49,23 +50,27 @@ public class RootFileService : IFileService
         return fileDtos;
     }
 
-    public Task<FileDto> GetFileAsync(Guid id)
+    public async Task<FileDto?> GetFileAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id);
+
+        var fileDto = file?.ToDto();
+        return fileDto;
     }
 
-    public  List<FileDto> Delete(List<FileDto> fileDtos)
+    public async Task<FileDto?> DeleteAsync(Guid id)
     {
-        var deletedDtos = new List<FileDto>();
-        
-        foreach (var fileDto in fileDtos)
-        {
-            if (System.IO.File.Exists(fileDto.Path))
-                System.IO.File.Delete(fileDto.Path);
-            
-            deletedDtos.Add(fileDto);
-        }
+        var fileEntity = await _context.Files.FirstOrDefaultAsync(f => f.Id == id);
 
-        return deletedDtos;
+        if (fileEntity == null)
+            return null;
+        
+        _context.Files.Remove(fileEntity);
+        
+        if (System.IO.File.Exists(fileEntity.Path))
+            System.IO.File.Delete(fileEntity.Path);
+        
+        await _context.SaveChangesAsync();
+        return fileEntity.ToDto();
     }
 }

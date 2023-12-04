@@ -6,8 +6,8 @@ public interface IFileService
 {
     public Task<List<FileDto>> UploadFileAsync(List<UploadFileRequest> fileRequests);
 
-    public Task<FileDto> GetFileAsync(Guid id);
+    public Task<FileDto?> GetFileAsync(Guid id);
 
-    public List<FileDto> Delete(List<FileDto> fileDtos);
+    public Task<FileDto?> DeleteAsync(Guid id);
     
 }
