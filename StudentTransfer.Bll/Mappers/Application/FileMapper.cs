@@ -15,7 +15,10 @@ public static class FileMapper
             Name = fileEntity.Name,
             ApplicationId = fileEntity.ApplicationEntityId,
             Extension = fileEntity.Extension,
-            Path = $"uploads/{fileEntity.Id}{fileEntity.Extension}", // relative api path to the file
+            
+            //TODO: remove hardcoded  localhost
+            UrlPath = $"http://localhost:5270/uploads/{fileEntity.Id}{fileEntity.Extension}", // Url to the file
+            
             UploadDate = fileEntity.UploadTime
         };
     }
@@ -28,7 +31,7 @@ public static class FileMapper
             Name = dto.Name,
             Extension = dto.Extension,
             ApplicationEntityId = dto.ApplicationId,
-            Path = dto.Path,
+            Path = dto.UrlPath, // In case of storing files locally, the UrlPath is the local path to the file      
             UploadTime = dto.UploadDate
         };
     }

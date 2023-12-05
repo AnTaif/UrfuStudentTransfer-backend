@@ -45,7 +45,7 @@ public class RootFileService : IFileService
                 Name = fileRequest.FileName,
                 ApplicationId = fileRequest.ApplicationId,
                 Extension = extension,
-                Path = filePath,
+                UrlPath = filePath,
                 UploadDate = DateTime.UtcNow
             };
             
@@ -59,7 +59,7 @@ public class RootFileService : IFileService
         return entities.Select(f => f.ToDto()).ToList();
     }
 
-    public async Task<GetPhysicalFileResponse?> GetPhysicalFileAsync(Guid id)
+    public async Task<GetFileResponse?> GetFileAsync(Guid id)
     {
         var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id);
 
@@ -69,7 +69,7 @@ public class RootFileService : IFileService
         var fileName = file.Name ?? file.UploadTime.ToString(CultureInfo.InvariantCulture) + file.Extension;
         var fileStream = new FileStream(file.Path, FileMode.Open);
 
-        return new GetPhysicalFileResponse(fileName, fileStream);
+        return new GetFileResponse(fileName, fileStream);
     }
 
     public async Task<FileDto?> GetFileDtoAsync(Guid id)

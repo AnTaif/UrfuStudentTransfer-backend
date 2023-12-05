@@ -6,7 +6,7 @@ public interface IFileService
 {
     public Task<List<FileDto>> GetAllByApplicationAsync(int applicationId);
     
-    public Task<GetPhysicalFileResponse?> GetPhysicalFileAsync(Guid id);
+    public Task<GetFileResponse?> GetFileAsync(Guid id);
 
     public Task<FileDto?> GetFileDtoAsync(Guid id);
     

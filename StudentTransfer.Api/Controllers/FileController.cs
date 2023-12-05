@@ -39,7 +39,7 @@ public class FileController : ControllerBase
         if (fileDto == null)
             return NotFound();
 
-        var filePath = fileDto.Path;
+        var filePath = fileDto.UrlPath;
         
         return PhysicalFile(filePath, "application/octet-stream", fileDto.Name);
     }
