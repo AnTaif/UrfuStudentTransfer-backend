@@ -20,3 +20,5 @@ public class FileDto
 }
 
 public record UploadFileRequest(string FileName, int ApplicationId, Stream Stream);
+
+public record GetPhysicalFileResponse(string FileName, Stream Stream);

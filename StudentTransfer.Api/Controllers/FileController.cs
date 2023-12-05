@@ -34,7 +34,7 @@ public class FileController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var fileDto = await _fileService.GetAsync(id);
+        var fileDto = await _fileService.GetFileDtoAsync(id);
 
         if (fileDto == null)
             return NotFound();

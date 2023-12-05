@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Bll.Mappers.Application;
 using StudentTransfer.Dal;
@@ -51,19 +52,31 @@ public class RootFileService : IFileService
             fileDtos.Add(fileDto);
         }
 
-        var entities = fileDtos.Select(f => f.ToEntity());
+        var entities = fileDtos.Select(f => f.ToEntity()).ToList();
         _context.Files.AddRange(entities);
         await _context.SaveChangesAsync();
 
-        return fileDtos;
+        return entities.Select(f => f.ToDto()).ToList();
     }
 
-    public async Task<FileDto?> GetAsync(Guid id)
+    public async Task<GetPhysicalFileResponse?> GetPhysicalFileAsync(Guid id)
     {
         var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id);
 
-        var fileDto = file?.ToDto();
-        return fileDto;
+        if (file == null)
+            return null;
+        
+        var fileName = file.Name ?? file.UploadTime.ToString(CultureInfo.InvariantCulture) + file.Extension;
+        var fileStream = new FileStream(file.Path, FileMode.Open);
+
+        return new GetPhysicalFileResponse(fileName, fileStream);
+    }
+
+    public async Task<FileDto?> GetFileDtoAsync(Guid id)
+    {
+        var file = await _context.Files.FirstOrDefaultAsync(f => f.Id == id);
+
+        return file?.ToDto();
     }
 
     public async Task<bool> TryDeleteAsync(Guid id)
