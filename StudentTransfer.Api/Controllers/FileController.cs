@@ -63,7 +63,7 @@ public class FileController : ControllerBase
         return CreatedAtAction("UploadApplicationFile", fileDtos);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteApplicationFileById(Guid id)
     {
         var success = await _fileService.TryDeleteAsync(id);
