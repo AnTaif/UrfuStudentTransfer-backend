@@ -25,6 +25,16 @@ public class ApplicationController : ControllerBase
         return await _service.GetAllAsync();
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var applicationDto = await _service.GetByIdAsync(id);
+
+        if (applicationDto == null)
+            return NotFound();
+        return Ok(applicationDto);
+    }
+
     [HttpPost]
     public async Task<IActionResult> AddApplication([FromForm]CreateApplicationRequest applicationRequest, List<IFormFile> formFiles)
     {
