@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using StudentTransfer.Bll.Services.Auth.JwtToken;
+using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Auth;
 using StudentTransfer.Utils;
 using StudentTransfer.Utils.Dto.Auth;
@@ -34,10 +35,13 @@ public class UserService : IUserService
 
         user = new AppUser
         {
+            UserName = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
             Email = request.Email,
         };
 
-        await _userManager.CreateAsync(user, request.Password);
+        var result = await _userManager.CreateAsync(user, request.Password);
         user = await _userManager.FindByEmailAsync(request.Email);
         
         if (user == null)
