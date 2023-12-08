@@ -20,7 +20,8 @@ public class StudentTransferContext : IdentityDbContext<AppUser, AppRole, Guid>
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        { 
+                base.OnModelCreating(modelBuilder);
         }
 
 }

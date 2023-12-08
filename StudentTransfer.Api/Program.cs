@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
-using StudentTransfer.Api;
 using StudentTransfer.Dal;
 using StudentTransfer.Bll;
 using StudentTransfer.Dal.Entities.Auth;
+using StudentTransfer.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,17 +28,15 @@ builder.Services.AddCors(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add layers
 builder.Services
-    .AddDataLayer(connectionString!)
-    .AddLogicLayer(builder.Environment.ContentRootPath);
-
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
-
-builder.Services
-    .AddIdentity<AppUser, AppRole>()
+    .AddIdentity<AppUser, AppRole>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+    })
     .AddEntityFrameworkStores<StudentTransferContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -53,13 +51,18 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "StudentTransfer",
-            ValidAudience = "StudentTransfer",
+            ValidIssuer = builder.Configuration["JwtOptions:Issuer"],
+            ValidAudience = builder.Configuration["JwtOptions:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("secretsecretsecretsecret")
+                Encoding.UTF8.GetBytes(builder.Configuration["JwtOptions:Secret"]!)
             ),
         };
     });
+
+// Add layers
+builder.Services
+    .AddDataLayer(connectionString!)
+    .AddLogicLayer(builder.Environment.ContentRootPath);
 
 var app = builder.Build();
 

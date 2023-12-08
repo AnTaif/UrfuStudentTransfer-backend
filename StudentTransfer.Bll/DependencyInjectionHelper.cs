@@ -2,6 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 using StudentTransfer.Bll.Services.Vacant;
 using StudentTransfer.Bll.Services;
 using StudentTransfer.Bll.Services.Application;
+using StudentTransfer.Bll.Services.Auth;
+using StudentTransfer.Bll.Services.Auth.JwtToken;
+using StudentTransfer.Bll.Services.Auth.User;
 using StudentTransfer.Bll.Services.File;
 using StudentTransfer.Dal;
 
@@ -18,6 +21,8 @@ public static class DependencyInjectionHelper
             var context = provider.GetRequiredService<StudentTransferContext>();
             return new RootFileService(context, Path.Combine(contentRootPath, "Uploads"));
         });
+        services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
         
         return services;
     }

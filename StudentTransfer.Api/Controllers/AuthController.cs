@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Bll.Services.Auth;
+using StudentTransfer.Bll.Services.Auth.User;
 using StudentTransfer.Dal.Entities.Auth;
+using StudentTransfer.Utils.Dto.Auth;
 
 namespace StudentTransfer.Api.Controllers;
 
@@ -14,7 +16,15 @@ public class AuthController : ControllerBase
     public AuthController(IUserService userService)
     {
         _userService = userService;
-    }   
-    
-    
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegistrationRequest request)
+    {
+        var response = await _userService.RegisterUserAsync(request);
+
+        if (response == null)
+            return BadRequest();
+        return Ok(response);
+    }
 }
