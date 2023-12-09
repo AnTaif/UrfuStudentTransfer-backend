@@ -63,11 +63,18 @@ public class UserService : IUserService
 
     public async Task<LoginResponse?> SignInAsync(LoginRequest request)
     {
-        throw new NotImplementedException();
-    }
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
-    public async Task<bool> SignOutAsync()
-    {
-        throw new NotImplementedException();
+        if (user == null)
+            return null;
+
+        var loginSuccess = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
+
+        if (!loginSuccess.Succeeded)
+            return null;
+
+        var token = await _jwtTokenGenerator.GenerateTokenAsync(user);
+
+        return new LoginResponse(user.Id, user.FirstName, user.LastName, user.Email!, token);
     }
 }

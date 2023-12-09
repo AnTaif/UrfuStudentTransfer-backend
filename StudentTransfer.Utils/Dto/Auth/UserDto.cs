@@ -30,5 +30,14 @@ public class RegistrationRequest
 
 public record RegistrationResponse(Guid Id, string FirstName, string LastName, string Email, string Token);
 
-public record LoginRequest(string Email, string Password);
-public record LoginResponse(UserDto User, string Token);
+public class LoginRequest
+{
+    [Required]
+    public string Email { get; set; } = null!;
+
+    [Required]
+    public string Password { get; set; } = null!;
+}
+
+public record LoginResponse(Guid Id, string FirstName, string LastName, string Email, string Token);
+

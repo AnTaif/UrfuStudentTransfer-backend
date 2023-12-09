@@ -27,4 +27,14 @@ public class AuthController : ControllerBase
             return BadRequest();
         return Ok(response);
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        var response = await _userService.SignInAsync(request);
+
+        if (response == null)
+            return NotFound();
+        return Ok(response);
+    }
 }

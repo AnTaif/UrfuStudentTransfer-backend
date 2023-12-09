@@ -101,13 +101,6 @@ builder.Services
 
 var app = builder.Build();
 
-using (var serviceScope = app.Services.CreateScope())
-{
-    var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
-    
-    SeedData.SeedRoles(roleManager);
-}
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

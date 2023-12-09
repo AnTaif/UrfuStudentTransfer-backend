@@ -7,6 +7,4 @@ public interface IUserService
     public Task<RegistrationResponse?> RegisterUserAsync(RegistrationRequest request);
 
     public Task<LoginResponse?> SignInAsync(LoginRequest request);
-
-    public Task<bool> SignOutAsync();
 }
