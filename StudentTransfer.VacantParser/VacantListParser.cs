@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Dal.Entities.Vacant;
+using StudentTransfer.Dal.Enums;
 
 namespace StudentTransfer.VacantParser;
 

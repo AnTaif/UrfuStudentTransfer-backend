@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Bll.Mappers.Application;
 using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Application;
-using StudentTransfer.Dal.Entities.Enums;
+using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Application;
 using StudentTransfer.Utils.Dto.File;
 
@@ -52,7 +52,7 @@ public class ApplicationService : IApplicationService
         var application = new ApplicationEntity
         {
             Type = request.Type.MapToApplicationType(),
-            UserId = request.UserId,
+            //UserId = , //TODO: pass current user Id
             CurrentStatus = Status.Sent,
             Updates = null,
             InitialDate = request.Date.ToUniversalTime(),

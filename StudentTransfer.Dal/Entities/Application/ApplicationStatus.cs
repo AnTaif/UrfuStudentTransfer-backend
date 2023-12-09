@@ -1,4 +1,4 @@
-using StudentTransfer.Dal.Entities.Enums;
+using StudentTransfer.Dal.Enums;
 
 namespace StudentTransfer.Dal.Entities.Application;
 

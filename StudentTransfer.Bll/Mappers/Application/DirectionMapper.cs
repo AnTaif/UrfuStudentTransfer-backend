@@ -1,5 +1,5 @@
 using StudentTransfer.Dal.Entities.Application;
-using StudentTransfer.Dal.Entities.Enums;
+using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Application;
 
 namespace StudentTransfer.Bll.Mappers.Application;

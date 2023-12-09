@@ -1,5 +1,5 @@
-using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Dal.Entities.Vacant;
+using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Vacant;
 
 namespace StudentTransfer.Bll.Services.Vacant;

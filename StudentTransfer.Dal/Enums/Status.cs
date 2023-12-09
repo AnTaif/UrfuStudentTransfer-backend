@@ -1,4 +1,4 @@
-namespace StudentTransfer.Dal.Entities.Enums;
+namespace StudentTransfer.Dal.Enums;
 
 public enum Status
 {

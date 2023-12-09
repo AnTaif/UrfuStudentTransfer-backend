@@ -1,5 +1,5 @@
 using StudentTransfer.Dal.Entities.Application;
-using StudentTransfer.Dal.Entities.Enums;
+using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Application;
 
 namespace StudentTransfer.Bll.Mappers.Application;
@@ -11,9 +11,7 @@ public static class ApplicationMapper
         return new ApplicationDto
         {
             Id = application.Id,
-            
-            UserId = 0, //TODO
-            
+            UserId = application.AppUserId,
             Type = application.Type.MapToString(),
             Status = application.CurrentStatus.MapToString(),
             UpdateDate = application.Updates?.LastOrDefault()?.UpdateDate ?? application.InitialDate,

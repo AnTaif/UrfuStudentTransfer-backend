@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Bll.Mappers;
 using StudentTransfer.Dal;
-using StudentTransfer.Dal.Entities.Enums;
 using StudentTransfer.Dal.Entities.Vacant;
+using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Vacant;
 using StudentTransfer.VacantParser;
 

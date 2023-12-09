@@ -23,5 +23,4 @@ public class StudentTransferContext : IdentityDbContext<AppUser, AppRole, Guid>
         { 
                 base.OnModelCreating(modelBuilder);
         }
-
 }

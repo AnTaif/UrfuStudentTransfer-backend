@@ -9,7 +9,8 @@ public class ApplicationDto
 
     public string Type { get; set; } = null!;
     
-    public int UserId { get; set; }
+    //TODO: нужно ли передавать инфу о пользователе?
+    public Guid UserId { get; set; }
     
     public string Status { get; set; } = null!;
 
@@ -24,8 +25,6 @@ public class ApplicationDto
 
 public class CreateApplicationRequest
 {
-    public int UserId { get; set; }
-    
     public string Type { get; set; } = null!;
     
     public DateTime Date { get; set; }
