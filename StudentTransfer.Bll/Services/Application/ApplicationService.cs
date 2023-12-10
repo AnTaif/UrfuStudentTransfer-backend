@@ -52,7 +52,7 @@ public class ApplicationService : IApplicationService
         var application = new ApplicationEntity
         {
             Type = request.Type.MapToApplicationType(),
-            //UserId = , //TODO: pass current user Id
+            AppUserId = Guid.Parse("00000000-0000-0000-0000-000000000001"), // TODO: pass current user Id
             CurrentStatus = Status.Sent,
             Updates = null,
             InitialDate = request.Date.ToUniversalTime(),

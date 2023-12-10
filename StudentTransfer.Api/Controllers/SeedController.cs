@@ -11,12 +11,14 @@ namespace StudentTransfer.Api.Controllers;
 public class SeedController : ControllerBase
 {
     private readonly RoleManager<AppRole> _roleManager;
-    private readonly VacantService _vacantService;
+    private readonly IVacantService _vacantService;
+    private readonly UserManager<AppUser> _userManager;
 
-    public SeedController(RoleManager<AppRole> roleManager, VacantService vacantService)
+    public SeedController(RoleManager<AppRole> roleManager, IVacantService vacantService, UserManager<AppUser> userManager)
     {
         _roleManager = roleManager;
         _vacantService = vacantService;
+        _userManager = userManager;
     }
 
     [HttpGet] //TODO: Change to HttpPost
@@ -24,8 +26,35 @@ public class SeedController : ControllerBase
     {
         await SeedRolesAsync();
         await SeedVacantListAsync();
+        await SeedAdminUsersAsync();
 
         return NoContent();
+    }
+
+    public async Task SeedAdminUsersAsync()
+    {
+        var adminUsers = new List<AppUser>()
+        {
+            new()
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                UserName = "adminuser1@mail.ru",
+                Email = "adminuser1@mail.ru",
+                FirstName = "Admin",
+                LastName = "User"
+            }
+        };
+
+        foreach (var adminUser in adminUsers)
+        {
+            if (await _userManager.FindByIdAsync(adminUser.Id.ToString()) != null)
+                continue;
+            
+            const string password = "Adminpassword123";
+            
+            await _userManager.CreateAsync(adminUser, password);
+            await _userManager.AddToRoleAsync(adminUser, RoleConstants.Admin);
+        }
     }
 
     private async Task SeedVacantListAsync()
@@ -39,7 +68,8 @@ public class SeedController : ControllerBase
 
         foreach (var role in roles)
         {
-            if (await _roleManager.RoleExistsAsync(role)) return;
+            if (await _roleManager.RoleExistsAsync(role)) 
+                continue;
         
             var appRole = new AppRole() { Name = role };
             var result = await _roleManager.CreateAsync(appRole);
