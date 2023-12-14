@@ -7,9 +7,9 @@ public enum EducationLevel
     Magistracy = 2
 }
 
-public static class EducationLevelMapper
+public static class EducationLevelConverter
 {
-    public static EducationLevel MapToLevel(this string strLevel)
+    public static EducationLevel ConvertToLevel(this string strLevel)
     {
         return strLevel.ToLower() switch
         {
@@ -23,7 +23,7 @@ public static class EducationLevelMapper
         };  
     }
 
-    public static string MapToString(this EducationLevel level)
+    public static string ConvertToString(this EducationLevel level)
     {
         return level switch
         {

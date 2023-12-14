@@ -51,7 +51,7 @@ public class ApplicationService : IApplicationService
         
         var application = new ApplicationEntity
         {
-            Type = request.Type.MapToApplicationType(),
+            Type = request.Type.ConvertToApplicationType(),
             AppUserId = Guid.Parse("00000000-0000-0000-0000-000000000001"), // TODO: pass current user Id
             CurrentStatus = Status.Sent,
             Updates = null,
@@ -108,10 +108,10 @@ public class ApplicationService : IApplicationService
             return false;
 
         if (request.Type != null)
-            application.Type = request.Type.MapToApplicationType();
+            application.Type = request.Type.ConvertToApplicationType();
 
         if (request.Status != null)
-            application.CurrentStatus = request.Status.MapToStatus();
+            application.CurrentStatus = request.Status.ConvertToStatus();
 
         if (request.DirectionId != null)
         {

@@ -12,8 +12,8 @@ public static class ApplicationMapper
         {
             Id = application.Id,
             UserId = application.AppUserId,
-            Type = application.Type.MapToString(),
-            Status = application.CurrentStatus.MapToString(),
+            Type = application.Type.ConvertToString(),
+            Status = application.CurrentStatus.ConvertToString(),
             UpdateDate = application.Updates?.LastOrDefault()?.UpdateDate ?? application.InitialDate,
             Files = application.Files?.Select(f => f.ToDto()).ToList(),
             Direction = application.Direction.ToDto(),

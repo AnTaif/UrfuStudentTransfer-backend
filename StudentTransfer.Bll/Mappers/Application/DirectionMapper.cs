@@ -13,9 +13,9 @@ public static class DirectionMapper
             Id = direction.Id,
             Code = direction.Code,
             Name = direction.Name,
-            Level = direction.Level.MapToString(),
+            Level = direction.Level.ConvertToString(),
             Course = direction.Course,
-            Form = direction.Form.MapToString()
+            Form = direction.Form.ConvertToString()
         };
     }
 
@@ -26,9 +26,9 @@ public static class DirectionMapper
             Id = dto.Id,
             Code = dto.Code,
             Name = dto.Name,
-            Level = dto.Level!.MapToLevel(),
+            Level = dto.Level!.ConvertToLevel(),
             Course = dto.Course,
-            Form = dto.Form!.MapToForm()
+            Form = dto.Form!.ConvertToForm()
         };
     }
 }

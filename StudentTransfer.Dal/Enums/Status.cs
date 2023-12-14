@@ -3,14 +3,14 @@ namespace StudentTransfer.Dal.Enums;
 public enum Status
 {
     Sent = 0,
-    InProgress = 1, //TODO: Админ открыл заявку или скачал файл??? 
+    InProgress = 1, // Admin open application TODO: or downloading files
     Accepted = 2,
     Rejected = 3
 }
 
-public static class StatusMapper
+public static class StatusConverter
 {
-    public static Status MapToStatus(this string strStatus)
+    public static Status ConvertToStatus(this string strStatus)
     {
         return strStatus.ToLower() switch
         {
@@ -22,7 +22,7 @@ public static class StatusMapper
         };
     }
 
-    public static string MapToString(this Status status)
+    public static string ConvertToString(this Status status)
     {
         return status switch
         {

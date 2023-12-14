@@ -6,9 +6,9 @@ public enum ApplicationType
     Transfer = 1
 }
 
-public static class ApplicationTypeMapper
+public static class ApplicationTypeConverter
 {
-    public static ApplicationType MapToApplicationType(this string strType)
+    public static ApplicationType ConvertToApplicationType(this string strType)
     {
         return strType.ToLower() switch
         {
@@ -18,7 +18,7 @@ public static class ApplicationTypeMapper
         };  
     }
 
-    public static string MapToString(this ApplicationType type)
+    public static string ConvertToString(this ApplicationType type)
     {
         return type switch
         {

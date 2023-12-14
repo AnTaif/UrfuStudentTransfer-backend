@@ -38,7 +38,6 @@ public class ApplicationController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddApplication([FromForm]CreateApplicationRequest applicationRequest, List<IFormFile> formFiles)
     {
-        
         var dto = await _service.CreateAsync(applicationRequest);
         
         var fileRequests = formFiles

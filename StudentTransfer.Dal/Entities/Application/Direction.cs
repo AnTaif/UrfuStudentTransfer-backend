@@ -6,13 +6,13 @@ public class Direction
 {
     public int Id { get; set; }
     
-    public string Code { get; init; } = null!;
+    public string Code { get; set; } = null!;
     
-    public string Name { get; init; } = null!;
+    public string Name { get; set; } = null!;
 
-    public EducationLevel Level { get; init; }
+    public EducationLevel Level { get; set; }
     
-    public int Course { get; init; }
+    public int Course { get; set; }
     
-    public EducationForm Form { get; init; }
+    public EducationForm Form { get; set; }
 }
