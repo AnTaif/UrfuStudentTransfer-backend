@@ -21,7 +21,7 @@ public class SeedController : ControllerBase
         _userManager = userManager;
     }
 
-    [HttpGet] //TODO: Change to HttpPost
+    [HttpPost]
     public async Task<IActionResult> Seed()
     {
         await SeedRolesAsync();
@@ -31,7 +31,7 @@ public class SeedController : ControllerBase
         return NoContent();
     }
 
-    public async Task SeedAdminUsersAsync()
+    private async Task SeedAdminUsersAsync()
     {
         var adminUsers = new List<AppUser>()
         {
