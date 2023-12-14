@@ -17,6 +17,7 @@ public class StudentTransferContext : IdentityDbContext<AppUser, AppRole, Guid>
 
         public StudentTransferContext(DbContextOptions<StudentTransferContext> options) : base(options)
         {
+                Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
