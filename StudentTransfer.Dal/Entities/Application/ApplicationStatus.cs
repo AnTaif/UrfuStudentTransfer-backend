@@ -10,5 +10,5 @@ public class ApplicationStatus
     
     public string? Comment { get; set; }
     
-    public DateTime UpdateDate { get; set; }
+    public DateTime Date { get; set; }
 }

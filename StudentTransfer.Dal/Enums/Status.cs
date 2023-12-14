@@ -5,7 +5,8 @@ public enum Status
     Sent = 0,
     InProgress = 1, // Admin open application TODO: or downloading files
     Accepted = 2,
-    Rejected = 3
+    Rejected = 3,
+    Closed = 4,
 }
 
 public static class StatusConverter
@@ -18,6 +19,7 @@ public static class StatusConverter
             ("на рассмотрении") => Status.InProgress,
             ("принято") => Status.Accepted,
             ("отклонено") => Status.Rejected,
+            ("закрыто") => Status.Closed,
             _ => throw new ArgumentException("Wrong Status string argument")
         };
     }
@@ -30,6 +32,7 @@ public static class StatusConverter
             Status.InProgress => "На рассмотрении",
             Status.Accepted => "Принято",
             Status.Rejected => "Отклонено",
+            Status.Closed => "Закрыто",
             _ => throw new ArgumentException("Wrong EducationForm enum argument")
         };
     }
