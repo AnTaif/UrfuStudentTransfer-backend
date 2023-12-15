@@ -26,7 +26,7 @@ public class ApplicationController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<ApplicationDto>>> GetAll()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = User.FindFirstValue(ClaimTypes.Sid);
         var isAdmin = User.IsInRole(RoleConstants.Admin);
         
         if (userId == null)
@@ -41,7 +41,7 @@ public class ApplicationController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ApplicationDto>> GetById(int id)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = User.FindFirstValue(ClaimTypes.Sid);
         var isAdmin = User.IsInRole(RoleConstants.Admin);
         
         if (userId == null)
@@ -61,7 +61,7 @@ public class ApplicationController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ApplicationDto>> AddApplication([FromForm]CreateApplicationRequest applicationRequest, List<IFormFile> formFiles)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = User.FindFirstValue(ClaimTypes.Sid);
 
         if (userId == null)
             return Unauthorized();
@@ -81,7 +81,7 @@ public class ApplicationController : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> UpdateApplication(UpdateApplicationRequest request, int id)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = User.FindFirstValue(ClaimTypes.Sid);
         var isAdmin = User.IsInRole(RoleConstants.Admin);
 
         if (userId == null)
@@ -106,7 +106,7 @@ public class ApplicationController : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> DeleteApplication(int id)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = User.FindFirstValue(ClaimTypes.Sid);
         var isAdmin = User.IsInRole(RoleConstants.Admin);
 
         if (userId == null)
