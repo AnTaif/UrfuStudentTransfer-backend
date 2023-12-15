@@ -19,7 +19,24 @@ public class ApplicationService : IApplicationService
     
     public async Task<List<ApplicationDto>> GetAllAsync()
     {
-        var applications =  await _context.Applications.Include(a => a.Files).Include(a => a.Direction).ToListAsync();
+        var applications =  await _context.Applications
+            .Include(entity => entity.Files)
+            .Include(entity => entity.Direction)
+            .ToListAsync();
+        
+        var dtos = applications.Select(a => a.ToDto()).ToList();
+
+        return dtos;
+    }
+
+    public async Task<List<ApplicationDto>> GetAllByUserAsync(Guid userId)
+    {
+        var applications =  await _context.Applications
+            .Where(entity => entity.AppUserId == userId)
+            .Include(entity => entity.Files)
+            .Include(entity => entity.Direction)
+            .ToListAsync();
+        
         var dtos = applications.Select(a => a.ToDto()).ToList();
 
         return dtos;
@@ -28,16 +45,16 @@ public class ApplicationService : IApplicationService
     public async Task<ApplicationDto?> GetByIdAsync(int id)
     {
         var application = await _context.Applications
-            .Include(a => a.Files)
-            .Include(a => a.Direction)
-            .FirstOrDefaultAsync(a => a.Id == id);
+            .Include(entity => entity.Files)
+            .Include(entity => entity.Direction)
+            .FirstOrDefaultAsync(entity => entity.Id == id);
 
         var dto = application?.ToDto();
 
         return dto;
     }
 
-    public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request)
+    public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, Guid userId)
     {
         var vacantDirection = _context.VacantList.First(v => v.Id == request.DirectionId);
         var direction = new Direction
@@ -52,7 +69,7 @@ public class ApplicationService : IApplicationService
         var application = new ApplicationEntity
         {
             Type = request.Type.ConvertToApplicationType(),
-            AppUserId = Guid.Parse("00000000-0000-0000-0000-000000000001"), // TODO: pass current user Id
+            AppUserId = userId,
             CurrentStatus = Status.Sent,
             Updates = null,
             InitialDate = request.Date.ToUniversalTime(),
@@ -73,17 +90,22 @@ public class ApplicationService : IApplicationService
 
     public async Task<List<ApplicationDto>> GetActiveAsync()
     {
-        var activeApplications = await _context.Applications.Where(a => a.IsActive).ToListAsync();
-        var dtos = activeApplications.Select(a => a.ToDto()).ToList();
+        var activeApplications = await _context.Applications
+            .Where(entity => entity.IsActive)
+            .ToListAsync();
+        
+        var dtos = activeApplications.Select(entity => entity.ToDto()).ToList();
         
         return dtos;
     }
 
     public async Task<List<ApplicationDto>> GetByStatusAsync(Status status)
     {
-        var applications = await _context.Applications.Where(a => a.CurrentStatus == status).ToListAsync();
+        var applications = await _context.Applications
+            .Where(entity => entity.CurrentStatus == status)
+            .ToListAsync();
 
-        var dtos = applications.Select(a => a.ToDto()).ToList();
+        var dtos = applications.Select(entity => entity.ToDto()).ToList();
         return dtos;
     }
 
@@ -102,7 +124,10 @@ public class ApplicationService : IApplicationService
     
     public async Task<bool> TryUpdateAsync(int id, UpdateApplicationRequest request)
     {
-        var application = await _context.Applications.Include(a => a.Files).Include(a => a.Direction).FirstOrDefaultAsync(a => a.Id == id);
+        var application = await _context.Applications
+            .Include(entity => entity.Files)
+            .Include(entity => entity.Direction)
+            .FirstOrDefaultAsync(entity => entity.Id == id);
 
         if (application == null)
             return false;
@@ -115,7 +140,8 @@ public class ApplicationService : IApplicationService
 
         if (request.DirectionId != null)
         {
-            var vacantDirection = await _context.VacantList.FirstOrDefaultAsync(v => v.Id == request.DirectionId);
+            var vacantDirection = await _context.VacantList
+                .FirstOrDefaultAsync(v => v.Id == request.DirectionId);
 
             if (vacantDirection == null)
                 return false;

@@ -9,15 +9,17 @@ public interface IApplicationService
 {
     Task<List<ApplicationDto>> GetAllAsync();
     
+    Task<List<ApplicationDto>> GetActiveAsync();
+    
+    Task<List<ApplicationDto>> GetAllByUserAsync(Guid userId);
+    
     Task<ApplicationDto?> GetByIdAsync(int id);
 
-    Task<ApplicationDto> CreateAsync(CreateApplicationRequest request);
+    Task<List<ApplicationDto>> GetByStatusAsync(Status status);
+ 
+    Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, Guid userId);
 
     Task ChangeStatusAsync(int applicationId, Status newStatus);
-    
-    Task<List<ApplicationDto>> GetActiveAsync();
-
-    Task<List<ApplicationDto>> GetByStatusAsync(Status status);
 
     Task<bool> TryDeleteAsync(int id);
 

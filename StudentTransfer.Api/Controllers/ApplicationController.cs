@@ -1,11 +1,15 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Bll.Services.Application;
 using StudentTransfer.Bll.Services.File;
+using StudentTransfer.Utils;
 using StudentTransfer.Utils.Dto.Application;
 using StudentTransfer.Utils.Dto.File;
 
 namespace StudentTransfer.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/applications")]
 public class ApplicationController : ControllerBase
@@ -20,30 +24,54 @@ public class ApplicationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<ApplicationDto>> GetAll()
+    public async Task<ActionResult<List<ApplicationDto>>> GetAll()
     {
-        return await _service.GetAllAsync();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var isAdmin = User.IsInRole(RoleConstants.Admin);
+        
+        if (userId == null)
+            return Unauthorized();
+
+        if (isAdmin)
+            return await _service.GetAllAsync();
+        
+        return await _service.GetAllByUserAsync(Guid.Parse(userId));
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult<ApplicationDto>> GetById(int id)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var isAdmin = User.IsInRole(RoleConstants.Admin);
+        
+        if (userId == null)
+            return Unauthorized();
+        
         var applicationDto = await _service.GetByIdAsync(id);
-
+        
         if (applicationDto == null)
             return NotFound();
+
+        if (applicationDto.UserId != Guid.Parse(userId) && !isAdmin)
+            return Forbid();
+            
         return Ok(applicationDto);
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddApplication([FromForm]CreateApplicationRequest applicationRequest, List<IFormFile> formFiles)
+    public async Task<ActionResult<ApplicationDto>> AddApplication([FromForm]CreateApplicationRequest applicationRequest, List<IFormFile> formFiles)
     {
-        var dto = await _service.CreateAsync(applicationRequest);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+            return Unauthorized();
+        
+        var dto = await _service.CreateAsync(applicationRequest, Guid.Parse(userId));
         
         var fileRequests = formFiles
             .Select(formFile => new UploadFileRequest(formFile.FileName, dto.Id, formFile.OpenReadStream())).ToList();
 
-        var fileDtos = await _fileService.UploadAsync(fileRequests);
+        var fileDtos = await _fileService.UploadAsync(fileRequests, Guid.Parse(userId));
         dto.Files = fileDtos;
 
         return CreatedAtAction("AddApplication", dto);
@@ -53,20 +81,43 @@ public class ApplicationController : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> UpdateApplication(UpdateApplicationRequest request, int id)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var isAdmin = User.IsInRole(RoleConstants.Admin);
+
+        if (userId == null)
+            return Unauthorized();
+
+        var applicationDto = await _service.GetByIdAsync(id);
+
+        if (applicationDto == null)
+            return NotFound();
+
+        if (applicationDto.UserId != Guid.Parse(userId) && !isAdmin)
+            return Forbid();
+        
         var success = await _service.TryUpdateAsync(id, request);
 
         if (success)
             return NoContent();
-        return NotFound();
+        return BadRequest();
     }
 
     [HttpDelete]
     [Route("{id}")]
     public async Task<IActionResult> DeleteApplication(int id)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var isAdmin = User.IsInRole(RoleConstants.Admin);
+
+        if (userId == null)
+            return Unauthorized();
+        
         var applicationDto = await _service.GetByIdAsync(id);
         if (applicationDto == null)
             return NotFound();
+        
+        if (applicationDto.UserId != Guid.Parse(userId) && !isAdmin)
+            return Forbid();
         
         var success = await _service.TryDeleteAsync(id);
         
@@ -80,6 +131,6 @@ public class ApplicationController : ControllerBase
         
         if (success)
             return NoContent();
-        return NotFound();
+        return BadRequest();
     }
 }

@@ -9,7 +9,6 @@ public class ApplicationDto
 
     public string Type { get; set; } = null!;
     
-    //TODO: нужно ли передавать инфу о пользователе?
     public Guid UserId { get; set; }
     
     public string Status { get; set; } = null!;
