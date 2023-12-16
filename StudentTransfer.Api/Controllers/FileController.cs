@@ -26,11 +26,8 @@ public class FileController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<FileDto>>> GetAllByApplicationId(int applicationId)
     {
-        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid);
+        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
         var isAdmin = User.IsInRole(RoleConstants.Admin);
-
-        if (userId == null)
-            return Unauthorized();
         
         var application = await _applicationService.GetByIdAsync(applicationId);
         if (application == null)
@@ -47,11 +44,8 @@ public class FileController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<FileDto>> GetById(Guid id, int applicationId)
     {
-        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid);
+        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
         var isAdmin = User.IsInRole(RoleConstants.Admin);
-
-        if (userId == null)
-            return Unauthorized();
         
         var fileDto = await _fileService.GetFileDtoAsync(id);
 
@@ -69,11 +63,8 @@ public class FileController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<List<FileDto>>> UploadApplicationFiles(int applicationId, List<IFormFile> formFiles)
     {
-        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid);
+        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
         var isAdmin = User.IsInRole(RoleConstants.Admin);
-        
-        if (userId == null)
-            return Unauthorized();
         
         var application = await _applicationService.GetByIdAsync(applicationId);
         if (application == null)
@@ -96,11 +87,8 @@ public class FileController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteApplicationFileById(Guid id, int applicationId)
     {
-        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid);
+        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
         var isAdmin = User.IsInRole(RoleConstants.Admin);
-
-        if (userId == null)
-            return Unauthorized();
 
         var fileDto = await _fileService.GetFileDtoAsync(id);
 
