@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentTransfer.Dal;
@@ -11,9 +12,11 @@ using StudentTransfer.Dal;
 namespace StudentTransfer.Dal.Migrations
 {
     [DbContext(typeof(StudentTransferContext))]
-    partial class StudentTransferContextModelSnapshot : ModelSnapshot
+    [Migration("20231216104758_applicationUserId")]
+    partial class applicationUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,9 +226,6 @@ namespace StudentTransfer.Dal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AppUserId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("ApplicationEntityId")
                         .HasColumnType("integer");
 
@@ -241,6 +241,9 @@ namespace StudentTransfer.Dal.Migrations
 
                     b.Property<DateTime>("UploadTime")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

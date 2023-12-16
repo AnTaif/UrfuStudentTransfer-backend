@@ -8,7 +8,7 @@ public class FileEntity
     [Key]
     public Guid Id { get; set; }
     
-    //public Guid OwnerId { get; set; }
+    public Guid AppUserId { get; set; }
     
     public int ApplicationEntityId { get; set; }
     

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentTransfer.Dal;
@@ -11,9 +12,11 @@ using StudentTransfer.Dal;
 namespace StudentTransfer.Dal.Migrations
 {
     [DbContext(typeof(StudentTransferContext))]
-    partial class StudentTransferContextModelSnapshot : ModelSnapshot
+    [Migration("20231216105445_fileUserId")]
+    partial class fileUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -25,7 +25,7 @@ public class RootFileService : IFileService
         return dtos;
     }
     
-    public async Task<List<FileDto>> UploadAsync(List<UploadFileRequest> fileRequests)
+    public async Task<List<FileDto>> UploadAsync(List<UploadFileRequest> fileRequests, Guid userId)
     {
         var fileDtos = new List<FileDto>();
         
@@ -41,7 +41,7 @@ public class RootFileService : IFileService
             var fileDto = new FileDto
             {
                 Id = fileId,
-                OwnerId = Guid.NewGuid(),
+                OwnerId = userId,
                 Name = fileRequest.FileName,
                 ApplicationId = fileRequest.ApplicationId,
                 Extension = extension,

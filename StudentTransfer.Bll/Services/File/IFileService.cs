@@ -12,5 +12,5 @@ public interface IFileService
     
     public Task<bool> TryDeleteAsync(Guid id);
     
-    public Task<List<FileDto>> UploadAsync(List<UploadFileRequest> fileRequests);
+    public Task<List<FileDto>> UploadAsync(List<UploadFileRequest> fileRequests, Guid userId);
 }

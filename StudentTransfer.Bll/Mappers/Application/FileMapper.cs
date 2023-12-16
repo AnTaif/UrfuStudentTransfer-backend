@@ -12,6 +12,7 @@ public static class FileMapper
         return new FileDto()
         {
             Id = fileEntity.Id,
+            OwnerId = fileEntity.AppUserId,
             Name = fileEntity.Name,
             ApplicationId = fileEntity.ApplicationEntityId,
             Extension = fileEntity.Extension,
@@ -28,6 +29,7 @@ public static class FileMapper
         return new FileEntity()
         {
             Id = dto.Id,
+            AppUserId = dto.OwnerId,
             Name = dto.Name,
             Extension = dto.Extension,
             ApplicationEntityId = dto.ApplicationId,

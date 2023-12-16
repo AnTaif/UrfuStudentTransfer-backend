@@ -6,7 +6,7 @@ public class FileDto
 {
     public Guid Id { get; set; }
 
-    public Guid OwnerId { get; set; } = new Guid();
+    public Guid OwnerId { get; set; }
     
     public int ApplicationId { get; set; }
     
