@@ -8,6 +8,8 @@ public class ApplicationEntity
     
     public ApplicationType Type { get; set; }
     
+    public ApplicationDetailedType DetailedType { get; set; }
+    
     public Guid AppUserId { get; set; }
     //public virtual AppUser User { get; set; }
     

@@ -69,27 +69,27 @@ public class ApplicationController : ControllerBase
         return CreatedAtAction("AddApplication", dto);
     }
 
-    [HttpPut]
-    [Route("{id}")]
-    public async Task<IActionResult> UpdateApplication(UpdateApplicationRequest request, int id)
-    {
-        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
-        var isAdmin = User.IsInRole(RoleConstants.Admin);
-
-        var applicationDto = await _service.GetByIdAsync(id);
-
-        if (applicationDto == null)
-            return NotFound();
-
-        if (applicationDto.UserId != Guid.Parse(userId) && !isAdmin)
-            return Forbid();
-        
-        var success = await _service.TryUpdateAsync(id, request);
-
-        if (success)
-            return NoContent();
-        return BadRequest();
-    }
+    // [HttpPut]
+    // [Route("{id}")]
+    // public async Task<IActionResult> UpdateApplication(UpdateApplicationRequest request, int id)
+    // {
+    //     var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
+    //     var isAdmin = User.IsInRole(RoleConstants.Admin);
+    //
+    //     var applicationDto = await _service.GetByIdAsync(id);
+    //
+    //     if (applicationDto == null)
+    //         return NotFound();
+    //
+    //     if (applicationDto.UserId != Guid.Parse(userId) && !isAdmin)
+    //         return Forbid();
+    //     
+    //     var success = await _service.TryUpdateAsync(id, request);
+    //
+    //     if (success)
+    //         return NoContent();
+    //     return BadRequest();
+    // }
 
     [HttpDelete]
     [Route("{id}")]

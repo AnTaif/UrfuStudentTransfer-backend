@@ -9,10 +9,14 @@ public class ApplicationDto
 
     public string Type { get; set; } = null!;
     
+    public string DetailedType { get; set; } = null!;
+    
     public Guid UserId { get; set; }
     
     public string Status { get; set; } = null!;
 
+    public DateTime InitialDate { get; set; }
+    
     public DateTime UpdateDate { get; set; }
 
     public List<FileDto>? Files { get; set; }
@@ -25,6 +29,8 @@ public class ApplicationDto
 public class CreateApplicationRequest
 {
     public string Type { get; set; } = null!;
+    
+    public string DetailedType { get; set; } = null!;
     
     public DateTime Date { get; set; }
     

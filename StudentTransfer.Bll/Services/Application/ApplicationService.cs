@@ -69,6 +69,7 @@ public class ApplicationService : IApplicationService
         var application = new ApplicationEntity
         {
             Type = request.Type.ConvertToApplicationType(),
+            DetailedType = request.DetailedType.ConvertToApplicationDetailedType(),
             AppUserId = userId,
             CurrentStatus = Status.Sent,
             Updates = null,
