@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Bll.Services.Vacant;
 using StudentTransfer.Dal.Entities.Auth;
+using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Utils;
 
 namespace StudentTransfer.Api.Controllers;

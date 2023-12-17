@@ -8,6 +8,7 @@ using StudentTransfer.Api;
 using StudentTransfer.Dal;
 using StudentTransfer.Bll;
 using StudentTransfer.Dal.Entities.Auth;
+using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Utils;
 
 var builder = WebApplication.CreateBuilder(args);

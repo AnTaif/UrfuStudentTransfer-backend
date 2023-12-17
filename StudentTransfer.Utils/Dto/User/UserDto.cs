@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace StudentTransfer.Utils.Dto.Auth;
+namespace StudentTransfer.Utils.Dto.User;
 
 public class UserDto
 {
