@@ -6,9 +6,7 @@ public class UserDto
 {
     public Guid Id { get; set; }
 
-    public string FirstName { get; set; } = null!;
-    
-    public string LastName { get; set; } = null!;
+    public string FullName { get; set; } = null!;
 
     public string Email { get; set; } = null!;
 }
@@ -23,12 +21,14 @@ public class RegistrationRequest
 
     [Required]
     public string LastName { get; set; } = null!;
+    
+    public string? MiddleName { get; set; }
 
     [Required]
     public string Password { get; set; } = null!;
 }
 
-public record RegistrationResponse(Guid Id, string FirstName, string LastName, string Email, string Token);
+public record RegistrationResponse(Guid Id, string FullName, string Email, string Token);
 
 public class LoginRequest
 {
@@ -39,5 +39,5 @@ public class LoginRequest
     public string Password { get; set; } = null!;
 }
 
-public record LoginResponse(Guid Id, string FirstName, string LastName, string Email, string Token);
+public record LoginResponse(Guid Id, string FullName, string Email, string Token);
 

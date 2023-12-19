@@ -73,10 +73,13 @@ public class UserService : IUserService
 
         var token = await _jwtTokenGenerator.GenerateTokenAsync(user);
 
+        var fullName = $"{user.LastName} {user.FirstName}";
+        if (user.MiddleName != null)
+            fullName += $" {user.MiddleName}";
+        
         var response = new RegistrationResponse(
             user.Id, 
-            user.FirstName, 
-            user.LastName, 
+            fullName,
             user.Email ?? "", 
             token);
 
@@ -96,8 +99,12 @@ public class UserService : IUserService
             return null;
 
         var token = await _jwtTokenGenerator.GenerateTokenAsync(user);
+        
+        var fullName = $"{user.LastName} {user.FirstName}";
+        if (user.MiddleName != null)
+            fullName += $" {user.MiddleName}";
 
-        return new LoginResponse(user.Id, user.FirstName, user.LastName, user.Email!, token);
+        return new LoginResponse(user.Id, fullName, user.Email!, token);
     }
 
     public async Task<IdentityResult> ChangeEmailAndUsernameAsync(ChangeEmailRequest request, string userId)
