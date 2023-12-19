@@ -1,3 +1,4 @@
+using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Dal.Enums;
 
 namespace StudentTransfer.Dal.Entities.Application;
@@ -11,7 +12,7 @@ public class ApplicationEntity
     public ApplicationDetailedType DetailedType { get; set; }
     
     public Guid AppUserId { get; set; }
-    //public virtual AppUser User { get; set; }
+    public virtual AppUser User { get; set; }
     
     public Status CurrentStatus { get; set; }
     

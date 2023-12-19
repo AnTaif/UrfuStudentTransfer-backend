@@ -18,18 +18,38 @@ public static class ApplicationDetailedTypeConverter
         return strType.ToLower() switch
         {
             "восстановление на бюджетную форму обучения" =>
-                ApplicationDetailedType.RecoveryToBudget, 
+                ApplicationDetailedType.RecoveryToBudget,
+            "0" =>
+                ApplicationDetailedType.RecoveryToBudget,
+            
             "восстановление на контрактную форму обучения" =>
-                ApplicationDetailedType.RecoveryToContract, 
+                ApplicationDetailedType.RecoveryToContract,
+            "1" =>
+                ApplicationDetailedType.RecoveryToContract,
+            
             "перевод на бюджетную форму обучения с контрактной" =>
                 ApplicationDetailedType.ContractToBudget,
+            "2" =>
+                ApplicationDetailedType.ContractToBudget,
+            
             "перевод на другое направление внутри института с бюджета на бюджет" =>
                 ApplicationDetailedType.BudgetToBudgetInsideSameInstitute,
+            "3" =>
+                ApplicationDetailedType.BudgetToBudgetInsideSameInstitute,
+            
             "перевод на другое направление внутри института с бюджета на контракт" =>
                 ApplicationDetailedType.BudgetToContractInsideSameInstitute,
+            "4" =>
+                ApplicationDetailedType.BudgetToContractInsideSameInstitute,
+            
             "перевод на другое направление в другой институт с бюджета на бюджет" =>
                 ApplicationDetailedType.BudgetToBudgetDifferentInstitute,
+            "5" =>
+                ApplicationDetailedType.BudgetToBudgetDifferentInstitute,
+            
             "перевод на другое направление в другой институт с бюджета на контракт" =>
+                ApplicationDetailedType.BudgetToContractDifferentInstitute,
+            "6" =>
                 ApplicationDetailedType.BudgetToContractDifferentInstitute,
             _ => throw new ArgumentException("Wrong ApplicationDetailedType string argument")
         };  
