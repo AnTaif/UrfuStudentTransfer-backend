@@ -1,44 +1,77 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
+using StudentTransfer.Bll.Services.Application;
+using StudentTransfer.Bll.Services.StatusServices;
+using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Utils;
 using StudentTransfer.Utils.Dto.StatusDtos;
 
 namespace StudentTransfer.Api.Controllers;
 
+[Authorize]
 [ApiController]
-[Route("api/applications/{applicationId}/status")]
-public class StatusController
+[Route("api/applications/{applicationId:int}/status")]
+public class StatusController : ControllerBase
 {
-    private readonly int _applicationId;
-    
-    public StatusController(int applicationId)
+    private readonly IApplicationService _applicationService;
+    private readonly IStatusService _statusService;
+
+    public StatusController(IApplicationService applicationService, IStatusService statusService)
     {
-        _applicationId = applicationId;
+        _applicationService = applicationService;
+        _statusService = statusService;
     }
 
     [HttpGet]
-    public async Task GetStatus(int id)
+    public async Task<ActionResult<ApplicationStatus>> GetCurrentStatus(int applicationId)
     {
-        throw new NotImplementedException();
-    }
-    
-    //TODO: [Authorize(Roles = RoleConstants.Admin)]
-    [HttpPost]
-    public Task<ActionResult<UpdateStatusResponse>> UpdateApplicationStatus()
-    {
-        throw new NotImplementedException();
+        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
+        var isAdmin = User.IsInRole(RoleConstants.Admin);
+
+        var application = await _applicationService.GetByIdAsync(applicationId);
+        if (application == null)
+            return NotFound();
+
+        if (application.UserId != Guid.Parse(userId) && !isAdmin)
+            return Forbid();
+        
+        var currentStatus = await _statusService.GetApplicationStatusAsync(applicationId);
+
+        if (currentStatus == null)
+            return BadRequest();
+        return Ok(currentStatus);
     }
     
     [HttpGet("history")]
-    public Task<IActionResult> GetStatusHistory()
+    public async Task<ActionResult<List<ApplicationStatus>>> GetStatusHistory(int applicationId)
     {
-        throw new NotImplementedException();
-    }
+        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
+        var isAdmin = User.IsInRole(RoleConstants.Admin);
 
-    //TODO: [Authorize(Roles = RoleConstants.Admin)]
-    [HttpPost("next")]
-    public Task<ActionResult<NextStatusResponse>> NextStatus()
+        var application = await _applicationService.GetByIdAsync(applicationId);
+        if (application == null)
+            return NotFound();
+
+        if (application.UserId != Guid.Parse(userId) && !isAdmin)
+            return Forbid();
+        
+        var statusHistory = await _statusService.GetStatusHistoryAsync(applicationId);
+
+        if (statusHistory == null)
+            return BadRequest();
+        return Ok(statusHistory);
+    }
+    
+    [Authorize(Roles = RoleConstants.Admin)]
+    [HttpPost]
+    public async Task<IActionResult> UpdateApplicationStatus(UpdateStatusRequest request, int applicationId)
     {
-        throw new NotImplementedException();
-    } 
+        var result = await _statusService.TryUpdateStatusAsync(request, applicationId);
+
+        if (result)
+            return NoContent();
+        return BadRequest();
+    }
 }

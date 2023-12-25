@@ -6,6 +6,7 @@ using StudentTransfer.Bll.Services.Auth;
 using StudentTransfer.Bll.Services.Auth.JwtToken;
 using StudentTransfer.Bll.Services.Auth.User;
 using StudentTransfer.Bll.Services.File;
+using StudentTransfer.Bll.Services.StatusServices;
 using StudentTransfer.Dal;
 
 namespace StudentTransfer.Bll;
@@ -23,6 +24,7 @@ public static class DependencyInjectionHelper
         });
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddTransient<IStatusService, StatusService>();
         
         return services;
     }

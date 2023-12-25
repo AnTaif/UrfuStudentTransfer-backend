@@ -17,9 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Change date format
-var newDateTimeFormat = "dd:MM:yyyy";
+const string newDateTimeFormat = "dd:MM:yyyy";
 
-CultureInfo newCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+var newCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
 newCulture.DateTimeFormat.ShortDatePattern = newDateTimeFormat;
 CultureInfo.DefaultThreadCurrentCulture = newCulture;
 CultureInfo.DefaultThreadCurrentUICulture = newCulture;

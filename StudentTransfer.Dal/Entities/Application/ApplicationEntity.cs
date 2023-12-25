@@ -15,8 +15,8 @@ public class ApplicationEntity
     public virtual AppUser User { get; set; }
     
     public Status CurrentStatus { get; set; }
-    
-    public virtual List<ApplicationStatus>? Updates { get; set; }
+
+    public virtual List<ApplicationStatus> StatusUpdates { get; set; } = new List<ApplicationStatus>();
     
     public List<FileEntity>? Files { get; set; }
 

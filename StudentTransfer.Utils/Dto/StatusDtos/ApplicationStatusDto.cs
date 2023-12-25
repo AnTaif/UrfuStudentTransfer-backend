@@ -1,12 +1,12 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace StudentTransfer.Utils.Dto.StatusDtos;
 
-public class UpdateStatusRequest
+public class ApplicationStatusDto
 {
-    [Required]
+    public Guid Id { get; set; }
+    
     public string Status { get; set; } = null!;
     
-    [MaxLength(255)]
     public string? Comment { get; set; }
+    
+    public DateTime Date { get; set; }
 }

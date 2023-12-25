@@ -22,6 +22,7 @@ public class ApplicationService : IApplicationService
         var applications =  await _context.Applications
             .Include(entity => entity.Files)
             .Include(entity => entity.Direction)
+            .Include(entity => entity.StatusUpdates)
             .ToListAsync();
         
         var dtos = applications.Select(a => a.ToDto()).ToList();
@@ -35,6 +36,7 @@ public class ApplicationService : IApplicationService
             .Where(entity => entity.AppUserId == userId)
             .Include(entity => entity.Files)
             .Include(entity => entity.Direction)
+            .Include(entity => entity.StatusUpdates)
             .ToListAsync();
         
         var dtos = applications.Select(a => a.ToDto()).ToList();
@@ -47,6 +49,7 @@ public class ApplicationService : IApplicationService
         var application = await _context.Applications
             .Include(entity => entity.Files)
             .Include(entity => entity.Direction)
+            .Include(entity => entity.StatusUpdates)
             .FirstOrDefaultAsync(entity => entity.Id == id);
 
         var dto = application?.ToDto();
@@ -65,14 +68,22 @@ public class ApplicationService : IApplicationService
             Course = vacantDirection.Course,
             Form = vacantDirection.Form
         };
-        
+
+        var newStatus = new ApplicationStatus
+        {
+            Id = Guid.NewGuid(),
+            Status = Status.Sent,
+            Comment = null,
+            Date = DateTime.UtcNow
+        };
+
         var application = new ApplicationEntity
         {
             Type = request.Type.ConvertToApplicationType(),
             DetailedType = request.DetailedType.ConvertToApplicationDetailedType(),
             AppUserId = userId,
-            CurrentStatus = Status.Sent,
-            Updates = null,
+            CurrentStatus = newStatus.Status,
+            StatusUpdates = new List<ApplicationStatus>() { newStatus },
             InitialDate = request.Date.ToUniversalTime(),
             Direction = direction,
             IsActive = true
@@ -92,6 +103,9 @@ public class ApplicationService : IApplicationService
     public async Task<List<ApplicationDto>> GetActiveAsync()
     {
         var activeApplications = await _context.Applications
+            .Include(entity => entity.Files)
+            .Include(entity => entity.Direction)
+            .Include(entity => entity.StatusUpdates)
             .Where(entity => entity.IsActive)
             .ToListAsync();
         
@@ -103,6 +117,9 @@ public class ApplicationService : IApplicationService
     public async Task<List<ApplicationDto>> GetByStatusAsync(Status status)
     {
         var applications = await _context.Applications
+            .Include(entity => entity.Files)
+            .Include(entity => entity.Direction)
+            .Include(entity => entity.StatusUpdates)
             .Where(entity => entity.CurrentStatus == status)
             .ToListAsync();
 

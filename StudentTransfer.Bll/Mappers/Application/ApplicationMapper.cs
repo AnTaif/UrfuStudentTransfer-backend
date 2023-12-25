@@ -15,8 +15,9 @@ public static class ApplicationMapper
             Type = application.Type.ConvertToString(),
             DetailedType = application.DetailedType.ConvertToString(),
             Status = application.CurrentStatus.ConvertToString(),
+            StatusUpdates = application.StatusUpdates.Select(s => s.ToDto()).ToList(),
             InitialDate = application.InitialDate,
-            UpdateDate = application.Updates?.LastOrDefault()?.Date ?? application.InitialDate,
+            UpdateDate = application.StatusUpdates?.LastOrDefault()?.Date ?? application.InitialDate,
             Files = application.Files?.Select(f => f.ToDto()).ToList(),
             Direction = application.Direction.ToDto(),
             IsActive = application.IsActive

@@ -1,5 +1,6 @@
 
 using StudentTransfer.Utils.Dto.File;
+using StudentTransfer.Utils.Dto.StatusDtos;
 
 namespace StudentTransfer.Utils.Dto.Application;
 
@@ -14,6 +15,8 @@ public class ApplicationDto
     public Guid UserId { get; set; }
     
     public string Status { get; set; } = null!;
+
+    public List<ApplicationStatusDto> StatusUpdates { get; set; } = new();
 
     public DateTime InitialDate { get; set; }
     
