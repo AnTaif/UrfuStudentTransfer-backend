@@ -3,7 +3,7 @@ namespace StudentTransfer.Dal.Enums;
 public enum Status
 {
     Sent = 0,
-    InProgress = 1, // Admin open application TODO: or downloading files
+    InProgress = 1,
     Accepted = 2,
     Rejected = 3,
     Closed = 4,

@@ -18,7 +18,7 @@ public static class FileMapper
             Extension = fileEntity.Extension,
             
             //TODO: remove hardcoded  localhost
-            UrlPath = $"http://localhost:5270/uploads/{fileEntity.Id}{fileEntity.Extension}", // Url to the file
+            UrlPath = $"http://localhost:8080/uploads/{fileEntity.Id}{fileEntity.Extension}", // Url to the file
             
             UploadDate = fileEntity.UploadTime
         };

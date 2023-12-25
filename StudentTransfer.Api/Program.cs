@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,14 @@ using StudentTransfer.Utils;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+// Change date format
+var newDateTimeFormat = "dd:MM:yyyy";
+
+CultureInfo newCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+newCulture.DateTimeFormat.ShortDatePattern = newDateTimeFormat;
+CultureInfo.DefaultThreadCurrentCulture = newCulture;
+CultureInfo.DefaultThreadCurrentUICulture = newCulture;
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>

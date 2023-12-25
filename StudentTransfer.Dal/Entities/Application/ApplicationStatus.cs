@@ -4,7 +4,7 @@ namespace StudentTransfer.Dal.Entities.Application;
 
 public class ApplicationStatus
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     public Status Status { get; set; }
     
