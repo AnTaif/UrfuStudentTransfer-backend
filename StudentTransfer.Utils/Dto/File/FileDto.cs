@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace StudentTransfer.Utils.Dto.File;
 
 public class FileDto

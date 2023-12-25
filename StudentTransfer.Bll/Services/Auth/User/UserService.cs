@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using StudentTransfer.Bll.Services.Auth.JwtToken;
-using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Auth;
 using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Utils;

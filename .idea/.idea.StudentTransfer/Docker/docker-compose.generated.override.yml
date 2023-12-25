@@ -1,0 +1,23 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  studenttransfer.api:
+    build:
+      context: "C:\\Users\\gavri\\Programming\\NET-Projects\\StudentTransfer"
+      dockerfile: "StudentTransfer.Api/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/StudentTransfer.Api.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      NUGET_PACKAGES: "C:\\Users\\gavri\\.nuget\\packages"
+      NUGET_FALLBACK_PACKAGES: "C:\\Users\\gavri\\.nuget\\packages"
+    image: "studenttransfer.api:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\gavri\\.nuget\\packages:/root/.nuget/fallbackpackages"
+    - "C:\\Users\\gavri\\Programming\\NET-Projects\\StudentTransfer\\StudentTransfer.Api:/app:rw"
+    - "C:\\Users\\gavri\\Programming\\NET-Projects\\StudentTransfer:/src:rw"
+    working_dir: "/app"
