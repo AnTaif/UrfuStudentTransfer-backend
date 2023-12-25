@@ -62,6 +62,12 @@ public class UserController : ControllerBase
 
         return BadRequest();
     }
+
+    [HttpDelete]
+    public async Task DeleteUser(Guid id)
+    {
+        throw new NotImplementedException();
+    }
     
     // [HttpPut("change-email")]
     // public async Task<IActionResult> ChangeEmail(ChangeEmailRequest request)

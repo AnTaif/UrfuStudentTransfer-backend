@@ -60,6 +60,7 @@ public class UserService : IUserService
             UserName = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
+            MiddleName = request.MiddleName,
             Email = request.Email,
         };
 
@@ -139,11 +140,19 @@ public class UserService : IUserService
 
             var lastName = splitFullName[0];
             var firstName = splitFullName[1];
-            var middleName = splitFullName[2];
-
+            
             user.FirstName = firstName;
             user.LastName = lastName;
-            user.MiddleName = middleName;
+
+            try
+            {
+                var middleName = splitFullName[2];
+                user.MiddleName = middleName;
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
         }
 
         if (request.Telegram != null)

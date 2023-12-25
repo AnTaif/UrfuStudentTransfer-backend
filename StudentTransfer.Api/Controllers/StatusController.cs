@@ -15,6 +15,12 @@ public class StatusController
     {
         _applicationId = applicationId;
     }
+
+    [HttpGet]
+    public async Task GetStatus(int id)
+    {
+        throw new NotImplementedException();
+    }
     
     //TODO: [Authorize(Roles = RoleConstants.Admin)]
     [HttpPost]
