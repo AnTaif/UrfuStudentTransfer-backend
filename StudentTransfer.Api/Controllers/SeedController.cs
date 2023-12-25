@@ -39,8 +39,8 @@ public class SeedController : ControllerBase
             new()
             {
                 Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                UserName = "adminuser1@mail.ru",
-                Email = "adminuser1@mail.ru",
+                UserName = "adminuser@mail.ru",
+                Email = "adminuser@mail.ru",
                 FirstName = "Admin",
                 LastName = "User"
             }
@@ -51,7 +51,7 @@ public class SeedController : ControllerBase
             if (await _userManager.FindByIdAsync(adminUser.Id.ToString()) != null)
                 continue;
             
-            const string password = "Adminpassword123";
+            const string password = "Password123";
             
             await _userManager.CreateAsync(adminUser, password);
             await _userManager.AddToRoleAsync(adminUser, RoleConstants.Admin);
