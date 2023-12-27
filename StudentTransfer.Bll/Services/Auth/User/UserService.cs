@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using StudentTransfer.Bll.Services.Auth.JwtToken;
+using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Auth;
 using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Utils;
@@ -18,7 +20,8 @@ public class UserService : IUserService
         UserManager<AppUser> userManager, 
         SignInManager<AppUser> signInManager, 
         RoleManager<AppRole> roleManager,
-        IJwtTokenGenerator jwtTokenGenerator
+        IJwtTokenGenerator jwtTokenGenerator,
+        StudentTransferContext context
         )
     {
         _userManager = userManager;
@@ -109,15 +112,17 @@ public class UserService : IUserService
 
     public async Task<IdentityResult> ChangeEmailAndUsernameAsync(ChangeEmailRequest request, string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-        
-        if (user == null)
-            return IdentityResult.Failed(new IdentityError {Description = "User not found"});
+        // var user = await _userManager.FindByIdAsync(userId);
+        //
+        // if (user == null)
+        //     return IdentityResult.Failed(new IdentityError {Description = "User not found"});
+        //
+        // user.Email = request.NewEmail;
+        // user.UserName = request.NewEmail;
+        //
+        // return await _userManager.UpdateAsync(user);
 
-        user.Email = request.NewEmail;
-        user.UserName = request.NewEmail;
-
-        return await _userManager.UpdateAsync(user);
+        throw new NotImplementedException();
     }
 
     public async Task<IdentityResult> ChangeUserInfoAsync(ChangeUserInfoRequest request, string userId)
@@ -127,15 +132,15 @@ public class UserService : IUserService
         if (user == null)
             return IdentityResult.Failed(new IdentityError {Description = "User not found"});
 
-        if (request.Email != null)
+        if (!request.Email.IsNullOrEmpty())
         {
             user.Email = request.Email;
             user.UserName = request.Email;
         }
 
-        if (request.FullName != null)
+        if (!request.FullName.IsNullOrEmpty())
         {
-            var splitFullName = request.FullName.Split(' ');
+            var splitFullName = request.FullName!.Split(' ');
 
             var lastName = splitFullName[0];
             var firstName = splitFullName[1];
@@ -154,16 +159,18 @@ public class UserService : IUserService
             }
         }
 
-        if (request.Telegram != null)
+        if (!request.Telegram.IsNullOrEmpty())
         {
             user.Telegram = request.Telegram;
         }
 
-        if (request.PhoneNumber != null)
+        if (!request.PhoneNumber.IsNullOrEmpty())
         {
             user.PhoneNumber = request.PhoneNumber;
         }
 
-        return await _userManager.UpdateAsync(user);
+        var result = await _userManager.UpdateAsync(user);
+
+        return result;
     }
 }

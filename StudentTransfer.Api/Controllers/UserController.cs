@@ -63,7 +63,7 @@ public class UserController : ControllerBase
         return BadRequest();
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task DeleteUser(Guid id)
     {
         throw new NotImplementedException();
