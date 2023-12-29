@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentTransfer.Bll.Services.Vacant;
+using StudentTransfer.Utils;
+using StudentTransfer.Utils.Dto.Vacant;
 
 namespace StudentTransfer.Api.Controllers;
 
@@ -16,25 +18,27 @@ public class VacantController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync()
+    public async Task<ActionResult<List<VacantDirectionDto>>> GetAllAsync()
     {
         var dtoList = await _vacantService.GetAllAsync();
         return Ok(dtoList);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetByIdAsync(int id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<VacantDirectionDto>> GetByIdAsync(int id)
     {
         var dto = await _vacantService.GetByIdAsync(id);
 
+        if (dto == null)
+            return NotFound();
         return Ok(dto);
     }
     
+    [Authorize(Roles = RoleConstants.Admin)]
     [HttpPost("update")]
     public async Task<IActionResult> UpdateDatabaseAsync()
     {
         await _vacantService.UpdateParseAsync();
-    
-        return Ok();
+        return NoContent();
     }
 }

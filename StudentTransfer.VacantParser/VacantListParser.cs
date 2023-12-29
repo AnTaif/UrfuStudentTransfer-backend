@@ -7,24 +7,31 @@ namespace StudentTransfer.VacantParser;
 
 public static class VacantListParser
 {
-    public static async Task<List<VacantDirection>> ParseVacantItemsAsync()
+    private const string VacantUrl = "https://urfu.ru/sveden/vacant/";
+    
+    public static async Task<List<VacantDirection>?> ParseVacantItemsAsync()
     {
-        const string url = "https://urfu.ru/sveden/vacant/";
-        var htmlPage = "";
-        
-        using (var client = new HttpClient())
+        try
         {
-            using (var response = await client.GetAsync(url))
-            {
-                using (var content = response.Content)
-                {
-                    htmlPage = await content.ReadAsStringAsync();
-                }
-            }   
+            var htmlPage = await DownloadHtmlAsync();
+            var vacantList = ParseHtml(htmlPage);
+
+            return vacantList;
         }
-        
-        var vacantList = ParseHtml(htmlPage);
-        return vacantList;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"VacantListParser Error: {ex.Message}");
+            return null;
+        }
+    }
+    
+    private static async Task<string> DownloadHtmlAsync()
+    {
+        using var client = new HttpClient();
+        var response = await client.GetAsync(VacantUrl);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadAsStringAsync();
     }
 
     private static List<VacantDirection> ParseHtml(string html)
@@ -46,9 +53,9 @@ public static class VacantListParser
                 {
                     Code = td[0].InnerText,
                     Name = cleanedName,
-                    Level = EducationLevelConverter.ConvertToLevel(td[2].InnerText),
+                    Level = td[2].InnerText.ConvertToLevel(),
                     Course = Convert.ToInt32(td[3].InnerText),
-                    Form = EducationFormConverter.ConvertToForm(td[4].InnerText),
+                    Form = td[4].InnerText.ConvertToForm(),
                     FederalBudgets = Convert.ToInt32(td[5].InnerText),
                     SubjectsBudgets = Convert.ToInt32(td[6].InnerText),
                     LocalBudgets = Convert.ToInt32(td[7].InnerText),

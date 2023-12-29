@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Enums;
 
 namespace StudentTransfer.Dal.Entities.Vacant;

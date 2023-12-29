@@ -22,21 +22,4 @@ public static class VacantMapper
             Contracts = entity.Contracts
         };
     }
-
-    public static VacantDirection ToEntity(this VacantDirectionDto dto)
-    {
-        return new VacantDirection()
-        {
-            Id = dto.Id,
-            Code = dto.Code,
-            Name = dto.Name,
-            Level = dto.Level!.ConvertToLevel(),
-            Course = dto.Course,
-            Form = dto.Form!.ConvertToForm(),
-            FederalBudgets = dto.FederalBudgets,
-            SubjectsBudgets = dto.SubjectsBudgets,
-            LocalBudgets = dto.LocalBudgets,
-            Contracts = dto.Contracts
-        };
-    }
 }

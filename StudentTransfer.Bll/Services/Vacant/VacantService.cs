@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Bll.Mappers;
 using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Vacant;
-using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Vacant;
 using StudentTransfer.VacantParser;
 
@@ -20,33 +19,14 @@ public class VacantService : IVacantService
     public async Task<List<VacantDirectionDto>> GetAllAsync()
     {
         var directions = await _dbContext.VacantList.ToListAsync();
-        var dtos = directions.Select(d => d.ToDto());
-        return dtos.ToList();
+        var dtos = directions.Select(d => d.ToDto()).ToList();
+        return dtos;
     }
     
     public async Task<VacantDirectionDto?> GetByIdAsync(int id)
     {
         var direction = await _dbContext.VacantList.FirstOrDefaultAsync(e => e.Id == id);
-
-        var dto = direction?.ToDto();
-
-        return dto;
-    }
-
-    public async Task<List<VacantDirectionDto>> GetByLevelAsync(EducationLevel level)
-    {
-        var directions = await _dbContext.VacantList.Where(e => e.Level == level).ToListAsync();
-        
-        var dtos = directions.Select(d => d.ToDto());
-        return dtos.ToList();
-    }
-
-    public async Task<List<VacantDirectionDto>> GetByFormAsync(EducationForm form)
-    {
-        var directions = await _dbContext.VacantList.Where(e => e.Form == form).ToListAsync();
-        
-        var dtos = directions.Select(d => d.ToDto());
-        return dtos.ToList();
+        return direction?.ToDto();
     }
 
     public async Task UpdateParseAsync()
@@ -54,13 +34,13 @@ public class VacantService : IVacantService
         var vacantList = await _dbContext.VacantList.ToListAsync();
         var vacantDirections = await VacantListParser.ParseVacantItemsAsync();
 
-        if (!AreIdentical(vacantList, vacantDirections))
+        if (vacantDirections != null && !AreIdentical(vacantList, vacantDirections))
         {
             await UpdateAsync(vacantDirections);
         }
     }
 
-    private async Task UpdateAsync(List<VacantDirection> newDirections)
+    private async Task UpdateAsync(IEnumerable<VacantDirection> newDirections)
     {
         await DeleteAllDataAsync();
         await AddListAsync(newDirections);
@@ -72,27 +52,25 @@ public class VacantService : IVacantService
         await _dbContext.SaveChangesAsync();
     }
 
-    private async Task AddListAsync(List<VacantDirection> directions)
+    private async Task AddListAsync(IEnumerable<VacantDirection> directions)
     {
-        _dbContext.VacantList.AddRange(directions);
+        await _dbContext.VacantList.AddRangeAsync(directions);
         await _dbContext.SaveChangesAsync();   
     }
 
     private static bool AreIdentical(List<VacantDirection> vacantList, List<VacantDirection> directions)
     {
-        var areIdentical = directions.All(dir => 
-            vacantList.Any(e => 
-                e.Code == dir.Code &&
-                e.Name == dir.Name &&
-                e.Level == dir.Level &&
-                e.Course == dir.Course &&
-                e.Form == dir.Form &&
-                e.FederalBudgets == dir.FederalBudgets &&
-                e.SubjectsBudgets == dir.SubjectsBudgets &&
-                e.LocalBudgets == dir.LocalBudgets &&
-                e.Contracts == dir.Contracts)
+        return directions.All(direction => 
+            vacantList.Any(vacantDirection => 
+                vacantDirection.Code == direction.Code &&
+                vacantDirection.Name == direction.Name &&
+                vacantDirection.Level == direction.Level &&
+                vacantDirection.Course == direction.Course &&
+                vacantDirection.Form == direction.Form &&
+                vacantDirection.FederalBudgets == direction.FederalBudgets &&
+                vacantDirection.SubjectsBudgets == direction.SubjectsBudgets &&
+                vacantDirection.LocalBudgets == direction.LocalBudgets &&
+                vacantDirection.Contracts == direction.Contracts)
         );
-        
-        return areIdentical;
     }
 }
