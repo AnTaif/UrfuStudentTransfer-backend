@@ -56,6 +56,7 @@ public class ApplicationService : IApplicationService
             .Include(entity => entity.Files)
             .Include(entity => entity.Direction)
             .Include(entity => entity.StatusUpdates)
+            .Include(entity => entity.User)
             .FirstOrDefaultAsync(entity => entity.Id == id);
 
         var dto = application?.ToDto();

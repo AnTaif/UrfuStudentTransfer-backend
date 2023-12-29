@@ -16,10 +16,15 @@ public static class StatusConverter
         return strStatus.ToLower() switch
         {
             ("отправлено") => Status.Sent,
+            ("0") => Status.Sent,
             ("на рассмотрении") => Status.InProgress,
+            ("1") => Status.InProgress,
             ("принято") => Status.Accepted,
+            ("2") => Status.Accepted,
             ("отклонено") => Status.Rejected,
+            ("3") => Status.Rejected,
             ("закрыто") => Status.Closed,
+            ("4") => Status.Closed,
             _ => throw new ArgumentException("Wrong Status string argument")
         };
     }

@@ -13,7 +13,9 @@ public static class ApplicationTypeConverter
         return strType.ToLower() switch
         {
             ("восстановление") => ApplicationType.Recovery, 
+            ("0") => ApplicationType.Recovery, 
             ("перевод") => ApplicationType.Transfer,
+            ("1") => ApplicationType.Transfer,
             _ => throw new ArgumentException("Wrong ApplicationType string argument")
         };  
     }

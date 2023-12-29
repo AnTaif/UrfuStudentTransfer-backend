@@ -8,11 +8,19 @@ public static class ApplicationMapper
 {
     public static ApplicationDto ToDto(this ApplicationEntity application)
     {
-        var user = application.User;
-        var fullName = $"{user.LastName} {user.FirstName}";
-        if (user.MiddleName != null)
-            fullName += $" {user.MiddleName}";
-        
+        var fullName = "";
+        try
+        {
+            var user = application.User;
+            fullName = $"{user.LastName} {user.FirstName}";
+            if (user.MiddleName != null)
+                fullName += $" {user.MiddleName}";
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
+
         return new ApplicationDto
         {
             Id = application.Id,
