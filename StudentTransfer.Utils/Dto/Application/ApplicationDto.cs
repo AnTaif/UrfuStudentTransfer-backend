@@ -13,6 +13,8 @@ public class ApplicationDto
     public string DetailedType { get; set; } = null!;
     
     public Guid UserId { get; set; }
+
+    public string UserFullName { get; set; } = null!;
     
     public string Status { get; set; } = null!;
 

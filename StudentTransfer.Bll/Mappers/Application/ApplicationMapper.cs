@@ -8,10 +8,16 @@ public static class ApplicationMapper
 {
     public static ApplicationDto ToDto(this ApplicationEntity application)
     {
+        var user = application.User;
+        var fullName = $"{user.LastName} {user.FirstName}";
+        if (user.MiddleName != null)
+            fullName += $" {user.MiddleName}";
+        
         return new ApplicationDto
         {
             Id = application.Id,
             UserId = application.AppUserId,
+            UserFullName = fullName,
             Type = application.Type.ConvertToString(),
             DetailedType = application.DetailedType.ConvertToString(),
             Status = application.CurrentStatus.ConvertToString(),

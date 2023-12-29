@@ -23,6 +23,7 @@ public class ApplicationService : IApplicationService
             .Include(entity => entity.Files)
             .Include(entity => entity.Direction)
             .Include(entity => entity.StatusUpdates)
+            .Include(entity => entity.User)
             .ToListAsync();
         
         var dtos = applications.Select(a => a.ToDto()).ToList();
@@ -37,6 +38,7 @@ public class ApplicationService : IApplicationService
             .Include(entity => entity.Files)
             .Include(entity => entity.Direction)
             .Include(entity => entity.StatusUpdates)
+            .Include(entity => entity.User)
             .ToListAsync();
         
         var dtos = applications.Select(a => a.ToDto()).ToList();
