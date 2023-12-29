@@ -59,6 +59,9 @@ public class ApplicationController : ControllerBase
         var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
 
         var dto = await _service.CreateAsync(applicationRequest, Guid.Parse(userId));
+
+        if (dto == null)
+            return BadRequest();
         
         var fileRequests = formFiles
             .Select(formFile => new UploadFileRequest(formFile.FileName, dto.Id, formFile.OpenReadStream())).ToList();

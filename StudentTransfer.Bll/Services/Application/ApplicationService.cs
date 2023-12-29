@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StudentTransfer.Bll.Mappers.Application;
 using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Application;
+using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Application;
 using StudentTransfer.Utils.Dto.File;
@@ -11,10 +13,12 @@ namespace StudentTransfer.Bll.Services.Application;
 public class ApplicationService : IApplicationService
 {
     private readonly StudentTransferContext _context;
+    private readonly UserManager<AppUser> _userManager;
 
-    public ApplicationService(StudentTransferContext context)
+    public ApplicationService(StudentTransferContext context, UserManager<AppUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
     
     public async Task<List<ApplicationDto>> GetAllAsync()
@@ -59,9 +63,13 @@ public class ApplicationService : IApplicationService
         return dto;
     }
 
-    public async Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, Guid userId)
+    public async Task<ApplicationDto?> CreateAsync(CreateApplicationRequest request, Guid userId)
     {
-        var vacantDirection = _context.VacantList.First(v => v.Id == request.DirectionId);
+        var vacantDirection = await _context.VacantList.FirstOrDefaultAsync(v => v.Id == request.DirectionId);
+
+        if (vacantDirection == null)
+            return null;
+        
         var direction = new Direction
         {
             Code = vacantDirection.Code,
@@ -79,11 +87,17 @@ public class ApplicationService : IApplicationService
             Date = DateTime.UtcNow
         };
 
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+            return null;
+
         var application = new ApplicationEntity
         {
             Type = request.Type.ConvertToApplicationType(),
             DetailedType = request.DetailedType.ConvertToApplicationDetailedType(),
             AppUserId = userId,
+            User = user,
             CurrentStatus = newStatus.Status,
             StatusUpdates = new List<ApplicationStatus>() { newStatus },
             InitialDate = request.Date.ToUniversalTime(),

@@ -17,7 +17,7 @@ public interface IApplicationService
 
     Task<List<ApplicationDto>> GetByStatusAsync(Status status);
  
-    Task<ApplicationDto> CreateAsync(CreateApplicationRequest request, Guid userId);
+    Task<ApplicationDto?> CreateAsync(CreateApplicationRequest request, Guid userId);
 
     Task ChangeStatusAsync(int applicationId, Status newStatus);
 
