@@ -1,4 +1,3 @@
-using StudentTransfer.Dal.Entities.Auth;
 using StudentTransfer.Dal.Entities.User;
 
 namespace StudentTransfer.Bll.Services.Auth.JwtToken;

@@ -4,6 +4,7 @@ using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.Auth;
 using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Dal.Entities.Vacant;
+
 namespace StudentTransfer.Dal;
 
 public class StudentTransferContext : IdentityDbContext<AppUser, AppRole, Guid>

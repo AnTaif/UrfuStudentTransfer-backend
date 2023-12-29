@@ -6,7 +6,6 @@ using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Application;
-using StudentTransfer.Utils.Dto.File;
 
 namespace StudentTransfer.Bll.Services.Application;
 

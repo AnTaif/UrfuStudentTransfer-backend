@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using StudentTransfer.Dal.Entities.Auth;
 using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Utils;
 

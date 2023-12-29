@@ -1,6 +1,4 @@
 using StudentTransfer.Dal.Entities.Application;
-using StudentTransfer.Utils.Dto;
-using StudentTransfer.Utils.Dto.Application;
 using StudentTransfer.Utils.Dto.File;
 
 namespace StudentTransfer.Bll.Mappers.Application;

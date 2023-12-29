@@ -1,11 +1,8 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using StudentTransfer.Bll.Services.Auth.User;
-using StudentTransfer.Dal.Entities.Auth;
-using StudentTransfer.Utils;
 using StudentTransfer.Utils.Dto.User;
 
 namespace StudentTransfer.Api.Controllers;

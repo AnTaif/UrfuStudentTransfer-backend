@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using StudentTransfer.Bll.Services.File;
-
 namespace StudentTransfer.Api.Controllers;
 
 // [ApiController]
