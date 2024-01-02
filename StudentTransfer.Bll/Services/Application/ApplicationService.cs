@@ -29,7 +29,9 @@ public class ApplicationService : IApplicationService
             .Include(entity => entity.User)
             .ToListAsync();
         
-        var dtos = applications.Select(a => a.ToDto()).ToList();
+        var dtos = applications
+            .Select(entity => entity.ToDto())
+            .ToList();
 
         return dtos;
     }
@@ -44,7 +46,10 @@ public class ApplicationService : IApplicationService
             .Include(entity => entity.User)
             .ToListAsync();
         
-        var dtos = applications.Select(a => a.ToDto()).ToList();
+        var dtos = applications
+            .Select(entity => entity.ToDto())
+            .OrderByDescending(dto => dto.UpdateDate)
+            .ToList();
 
         return dtos;
     }

@@ -36,7 +36,7 @@ public class ApplicationController : ControllerBase
         return await _service.GetAllByUserAsync(Guid.Parse(userId));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<ApplicationDto>> GetById(int id)
     {
         var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
@@ -72,30 +72,7 @@ public class ApplicationController : ControllerBase
         return CreatedAtAction("AddApplication", dto);
     }
 
-    // [HttpPut]
-    // [Route("{id}")]
-    // public async Task<IActionResult> UpdateApplication(UpdateApplicationRequest request, int id)
-    // {
-    //     var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
-    //     var isAdmin = User.IsInRole(RoleConstants.Admin);
-    //
-    //     var applicationDto = await _service.GetByIdAsync(id);
-    //
-    //     if (applicationDto == null)
-    //         return NotFound();
-    //
-    //     if (applicationDto.UserId != Guid.Parse(userId) && !isAdmin)
-    //         return Forbid();
-    //     
-    //     var success = await _service.TryUpdateAsync(id, request);
-    //
-    //     if (success)
-    //         return NoContent();
-    //     return BadRequest();
-    // }
-
-    [HttpDelete]
-    [Route("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteApplication(int id)
     {
         var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
@@ -114,9 +91,7 @@ public class ApplicationController : ControllerBase
 
         if (success && files != null)
             foreach (var file in files)
-            {
                 await _fileService.TryDeleteAsync(file.Id);
-            }
         
         if (success)
             return NoContent();

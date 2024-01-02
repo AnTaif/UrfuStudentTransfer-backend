@@ -49,7 +49,7 @@ public class StatusController : ControllerBase
     {
         var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sid)!;
         var isAdmin = User.IsInRole(RoleConstants.Admin);
-
+        
         var application = await _applicationService.GetByIdAsync(applicationId);
         if (application == null)
             return NotFound();
