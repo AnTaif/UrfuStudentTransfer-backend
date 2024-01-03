@@ -64,7 +64,9 @@ public class ApplicationController : ControllerBase
             return BadRequest();
         
         var fileRequests = formFiles
-            .Select(formFile => new UploadFileRequest(formFile.FileName, dto.Id, formFile.OpenReadStream())).ToList();
+                //TODO: Change <formFiles.FileName -> formFiles.Name> for naming saved files
+            .Select(formFile => new UploadFileRequest(formFile.FileName, dto.Id, formFile.OpenReadStream()))
+            .ToList();
 
         var fileDtos = await _fileService.UploadAsync(fileRequests, Guid.Parse(userId));
         dto.Files = fileDtos;
