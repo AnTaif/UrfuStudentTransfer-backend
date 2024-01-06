@@ -10,10 +10,8 @@ namespace StudentTransfer.UnitTests;
 
 public static class MockDataGenerator
 {
-    public static List<ApplicationEntity> GenerateUserApplications(Guid userId, int count = 1)
+    public static List<ApplicationEntity> GenerateUserApplications(AppUser user, int count = 1)
     {
-        var user = new AppUser { Id = userId, UserName = "user", FirstName = "user", LastName = "user" };
-
         var applications = new List<ApplicationEntity>();
         var direction = GenerateDirection();
         
@@ -23,7 +21,7 @@ public static class MockDataGenerator
             {
                 Type = ApplicationType.Recovery,
                 DetailedType = ApplicationDetailedType.RecoveryToBudget,
-                AppUserId = userId,
+                AppUserId = user.Id,
                 User = user,
                 CurrentStatus = Status.Sent,
                 InitialDate = DateTime.UtcNow,
@@ -50,7 +48,7 @@ public static class MockDataGenerator
             Form = EducationForm.FullTime
         };
     }
-    
+        
     public static StudentTransferContext GetDbContext()
     {
         return new StudentTransferContext(new DbContextOptionsBuilder<StudentTransferContext>()
@@ -65,12 +63,13 @@ public static class MockDataGenerator
             .ToList();
 
         var store = new Mock<IUserStore<AppUser>>();
-        store.Setup(x => x.FindByIdAsync(It.IsAny<string>(), It.IsAny<System.Threading.CancellationToken>()))
-            .ReturnsAsync((string userId, CancellationToken cancellationToken) => users.FirstOrDefault(u => u.Id.ToString() == userId));
 
         var userManager = new Mock<UserManager<AppUser>>(store.Object, null, null, null, null, null, null, null, null);
         userManager.Object.UserValidators.Add(new UserValidator<AppUser>());
         userManager.Object.PasswordValidators.Add(new PasswordValidator<AppUser>());
+
+        userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
+            .ReturnsAsync((string userId) => users.FirstOrDefault(user => user.Id == Guid.Parse(userId)));
 
         return userManager;
     }
