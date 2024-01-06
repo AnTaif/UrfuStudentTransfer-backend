@@ -3,6 +3,7 @@ using StudentTransfer.Dal.Entities.Vacant;
 using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Application;
 using static StudentTransfer.UnitTests.MockDataGenerator;
+using static StudentTransfer.UnitTests.MockManagersGenerator;
 
 namespace StudentTransfer.UnitTests.Bll;
 
@@ -15,7 +16,7 @@ public class ApplicationServiceTests
         var dbContext = GetDbContext();
         
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
@@ -38,7 +39,7 @@ public class ApplicationServiceTests
         
         var userId = Guid.NewGuid();
         var userId2 = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId, userId2);
+        var mockUserManager = GetMockUserManager((userId, null), (userId2, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         var user1 = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         var user2 = await mockUserManager.Object.FindByIdAsync(userId2.ToString());
@@ -60,7 +61,7 @@ public class ApplicationServiceTests
     {
         // Arrange
         var dbContext = GetDbContext();
-        var mockUserManager = GetMockUserManager(Guid.NewGuid());
+        var mockUserManager = GetMockUserManager((Guid.Empty, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
         // Act
@@ -76,7 +77,7 @@ public class ApplicationServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
@@ -99,7 +100,7 @@ public class ApplicationServiceTests
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
         var userId2 = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId, userId2);
+        var mockUserManager = GetMockUserManager((userId, null), (userId2, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         var user1 = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         var user2 = await mockUserManager.Object.FindByIdAsync(userId2.ToString());
@@ -124,7 +125,7 @@ public class ApplicationServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
@@ -146,7 +147,7 @@ public class ApplicationServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
@@ -171,7 +172,7 @@ public class ApplicationServiceTests
     {
         // Arrange
         var dbContext = GetDbContext();
-        var mockUserManager = GetMockUserManager(Guid.NewGuid());
+        var mockUserManager = GetMockUserManager((Guid.Empty, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
         // Act
@@ -187,7 +188,7 @@ public class ApplicationServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
 
@@ -229,7 +230,7 @@ public class ApplicationServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
@@ -254,7 +255,7 @@ public class ApplicationServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());

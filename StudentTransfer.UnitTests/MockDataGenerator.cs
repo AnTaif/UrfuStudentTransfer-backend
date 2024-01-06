@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using StudentTransfer.Dal;
 using StudentTransfer.Dal.Entities.Application;
+using StudentTransfer.Dal.Entities.Auth;
 using StudentTransfer.Dal.Entities.User;
 using StudentTransfer.Dal.Enums;
+using StudentTransfer.Utils;
 
 namespace StudentTransfer.UnitTests;
 
@@ -54,44 +56,5 @@ public static class MockDataGenerator
             Course = 1,
             Form = EducationForm.FullTime
         };
-    }
-        
-    public static StudentTransferContext GetDbContext()
-    {
-        return new StudentTransferContext(new DbContextOptionsBuilder<StudentTransferContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options);
-    }
-    
-    public static Mock<UserManager<AppUser>> GetMockUserManager(params Guid[] userIds)
-    {
-        var users = userIds
-            .Select(guid => new AppUser { Id = guid, UserName = guid.ToString(), FirstName = "user", LastName = "user" })
-            .ToList();
-
-        var store = new Mock<IUserStore<AppUser>>();
-
-        var userManager = new Mock<UserManager<AppUser>>(store.Object, null, null, null, null, null, null, null, null);
-        userManager.Object.UserValidators.Add(new UserValidator<AppUser>());
-        userManager.Object.PasswordValidators.Add(new PasswordValidator<AppUser>());
-
-        userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
-            .ReturnsAsync((string userId) => users.FirstOrDefault(user => user.Id == Guid.Parse(userId)));
-
-        return userManager;
-    }
-    
-    public static Mock<UserManager<AppUser>> GetMockUserManager(params AppUser[] users)
-    {
-        var store = new Mock<IUserStore<AppUser>>();
-
-        var userManager = new Mock<UserManager<AppUser>>(store.Object, null, null, null, null, null, null, null, null);
-        userManager.Object.UserValidators.Add(new UserValidator<AppUser>());
-        userManager.Object.PasswordValidators.Add(new PasswordValidator<AppUser>());
-
-        userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
-            .ReturnsAsync((string userId) => users.FirstOrDefault(user => user.Id == Guid.Parse(userId)));
-
-        return userManager;
     }
 }

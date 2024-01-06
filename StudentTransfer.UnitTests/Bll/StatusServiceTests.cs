@@ -4,6 +4,7 @@ using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.StatusDtos;
 using static StudentTransfer.UnitTests.MockDataGenerator;
+using static StudentTransfer.UnitTests.MockManagersGenerator;
 
 namespace StudentTransfer.UnitTests.Bll;
 
@@ -15,7 +16,7 @@ public class StatusServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var statusService = new StatusService(dbContext);
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
@@ -57,7 +58,7 @@ public class StatusServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var statusService = new StatusService(dbContext);
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
@@ -102,7 +103,7 @@ public class StatusServiceTests
         // Arrange
         var dbContext = GetDbContext();
         var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager(userId);
+        var mockUserManager = GetMockUserManager((userId, null));
         var statusService = new StatusService(dbContext);
         var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
