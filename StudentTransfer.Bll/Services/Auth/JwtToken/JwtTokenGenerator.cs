@@ -23,7 +23,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     public async Task<string> GenerateTokenAsync(AppUser user)
     {
         if (user.Email == null)
-            throw new ArgumentNullException("user email is null");
+            throw new ArgumentNullException();
         
         var claims = new List<Claim>
         {

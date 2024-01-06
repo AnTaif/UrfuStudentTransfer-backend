@@ -15,7 +15,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
@@ -37,7 +37,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        var users = mockUserManager.SetupUsers(2);
+        var users = mockUserManager.GenerateAndSetupUsers(2);
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
@@ -76,7 +76,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
@@ -99,7 +99,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
@@ -123,7 +123,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
@@ -146,7 +146,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
@@ -189,7 +189,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
@@ -233,7 +233,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
@@ -259,7 +259,7 @@ public class ApplicationServiceTests
         var dbContext = MockManager.GetDbContext();
         
         var mockUserManager = MockManager.GetMockUserManager();
-        mockUserManager.SetupUsers(1);
+        mockUserManager.GenerateAndSetupUsers(1);
         
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 

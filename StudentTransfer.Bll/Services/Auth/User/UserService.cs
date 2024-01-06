@@ -83,7 +83,7 @@ public class UserService : IUserService
         var response = new RegistrationResponse(
             user.Id, 
             fullName,
-            user.Email ?? "", 
+            user.Email!, 
             token);
 
         return response;

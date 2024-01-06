@@ -17,7 +17,7 @@ public class StatusServiceTests
         var dbContext = GetDbContext();
         var mockUserManager = GetMockUserManager();
         
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var statusService = new StatusService(dbContext);
         
@@ -62,7 +62,7 @@ public class StatusServiceTests
         var statusService = new StatusService(dbContext);
         
         var mockUserManager = GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applications = GenerateUserApplications(user, 2);
         applications.Last().StatusUpdates.Add(new ApplicationStatus
@@ -107,7 +107,7 @@ public class StatusServiceTests
         var statusService = new StatusService(dbContext);
         
         var mockUserManager = GetMockUserManager();
-        var user = mockUserManager.SetupUsers(1).Single();
+        var user = mockUserManager.GenerateAndSetupUsers(1).Single();
         
         var applications = GenerateUserApplications(user, 2);
         await dbContext.Applications.AddRangeAsync(applications);

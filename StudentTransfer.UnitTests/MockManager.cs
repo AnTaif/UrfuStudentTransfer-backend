@@ -21,7 +21,7 @@ public static class MockManager
     {
         var store = new Mock<IUserStore<AppUser>>();
 
-        var userManager = new Mock<UserManager<AppUser>>(store.Object, null, null, null, null, null, null, null, null);
+        var userManager = new Mock<UserManager<AppUser>>(store.Object,  null, null, null, null, null, null, null, null);
         userManager.Object.UserValidators.Add(new UserValidator<AppUser>());
         userManager.Object.PasswordValidators.Add(new PasswordValidator<AppUser>());
         

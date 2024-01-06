@@ -9,5 +9,9 @@
     &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests.GetStatusHistoryAsync_ReturnsNullIfNotFound&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests.GetStatusHistoryAsync_ReturnsNullWhenNotFound&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.JwtTokenGeneratorTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.UserServiceTests.GetUserInfoAsync_ValidUserId_ReturnsUserInfo&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.UserServiceTests.RegisterUserAsync_NewUser_ReturnsRegistrationResponse&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.UserServiceTests.SignInAsync_ValidCredentials_ReturnsLoginResponse&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
