@@ -1,6 +1,13 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\gavri\AppData\Local\JetBrains\Rider2023.2\resharper-host\temp\Rider\vAny\CoverageData\_StudentTransfer.-1114965833\Snapshot\snapshot.utdcvr</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=054eea0c_002Ded08_002D4819_002D8544_002Da85258429be3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ApplicationServiceTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.ApplicationServiceTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests.GetApplicationStatusAsync_Returns&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests.GetApplicationStatusAsync_ReturnsNullWhenNotFound&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests.GetStatusHistoryAsync_&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests.GetStatusHistoryAsync_ReturnsNullIfNotFound&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests.GetStatusHistoryAsync_ReturnsNullWhenNotFound&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::80036022-0B86-47DD-93DF-ECB8C65836A5::net7.0::StudentTransfer.UnitTests.Bll.StatusServiceTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

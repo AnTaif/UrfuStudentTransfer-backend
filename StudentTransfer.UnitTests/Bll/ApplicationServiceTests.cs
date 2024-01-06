@@ -60,7 +60,7 @@ public class ApplicationServiceTests
     {
         // Arrange
         var dbContext = GetDbContext();
-        var mockUserManager = GetMockUserManager();
+        var mockUserManager = GetMockUserManager(Guid.NewGuid());
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
         // Act
@@ -119,7 +119,7 @@ public class ApplicationServiceTests
     }
     
     [Fact]
-    public async Task GetAllByUserAsync_WhenUserNotFound()
+    public async Task GetAllByUserAsync_ReturnsNullWhenUserNotFound()
     {
         // Arrange
         var dbContext = GetDbContext();
@@ -164,6 +164,21 @@ public class ApplicationServiceTests
         Assert.Equal(testApplication.Id, result.Id);
         Assert.Equal(testApplication.DirectionId, result.Direction.Id);
         Assert.Equal(testApplication.AppUserId, result.UserId);
+    }
+    
+    [Fact]
+    public async Task GetByIdAsync_ReturnsNullWhenApplicationNotFound()
+    {
+        // Arrange
+        var dbContext = GetDbContext();
+        var mockUserManager = GetMockUserManager(Guid.NewGuid());
+        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
+        
+        // Act
+        var result = await applicationService.GetByIdAsync(0);
+    
+        // Assert
+        Assert.Null(result);
     }
     
     [Fact]
@@ -234,7 +249,7 @@ public class ApplicationServiceTests
     }
     
     [Fact]
-    public async Task CreateAsync_WhenUserNotFound()
+    public async Task CreateAsync_ReturnsNullWhenUserNotFound()
     {
         // Arrange
         var dbContext = GetDbContext();

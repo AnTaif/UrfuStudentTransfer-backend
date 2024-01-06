@@ -24,6 +24,13 @@ public static class MockDataGenerator
                 AppUserId = user.Id,
                 User = user,
                 CurrentStatus = Status.Sent,
+                StatusUpdates = new List<ApplicationStatus>() {new ApplicationStatus
+                    {
+                        Status = Status.Sent,
+                        Comment = "sent",
+                        Date = DateTime.UtcNow
+                    }
+                },
                 InitialDate = DateTime.UtcNow,
                 Direction = direction,
                 IsActive = true
@@ -62,6 +69,20 @@ public static class MockDataGenerator
             .Select(guid => new AppUser { Id = guid, UserName = guid.ToString(), FirstName = "user", LastName = "user" })
             .ToList();
 
+        var store = new Mock<IUserStore<AppUser>>();
+
+        var userManager = new Mock<UserManager<AppUser>>(store.Object, null, null, null, null, null, null, null, null);
+        userManager.Object.UserValidators.Add(new UserValidator<AppUser>());
+        userManager.Object.PasswordValidators.Add(new PasswordValidator<AppUser>());
+
+        userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
+            .ReturnsAsync((string userId) => users.FirstOrDefault(user => user.Id == Guid.Parse(userId)));
+
+        return userManager;
+    }
+    
+    public static Mock<UserManager<AppUser>> GetMockUserManager(params AppUser[] users)
+    {
         var store = new Mock<IUserStore<AppUser>>();
 
         var userManager = new Mock<UserManager<AppUser>>(store.Object, null, null, null, null, null, null, null, null);
