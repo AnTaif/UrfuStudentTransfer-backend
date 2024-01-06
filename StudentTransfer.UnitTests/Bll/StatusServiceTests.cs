@@ -4,7 +4,7 @@ using StudentTransfer.Dal.Entities.Application;
 using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.StatusDtos;
 using static StudentTransfer.UnitTests.MockDataGenerator;
-using static StudentTransfer.UnitTests.MockManagersGenerator;
+using static StudentTransfer.UnitTests.MockManager;
 
 namespace StudentTransfer.UnitTests.Bll;
 
@@ -15,14 +15,16 @@ public class StatusServiceTests
     {
         // Arrange
         var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
-        var statusService = new StatusService(dbContext);
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
+        var mockUserManager = GetMockUserManager();
         
-        var applications = GenerateUserApplications(user!, 2);
+        var user = mockUserManager.SetupUsers(1).Single();
+        
+        var statusService = new StatusService(dbContext);
+        
+        var applications = GenerateUserApplications(user, 2);
         await dbContext.Applications.AddRangeAsync(applications);
         await dbContext.SaveChangesAsync();
+        
         var testApplication = await dbContext.Applications
             .Include(applicationEntity => applicationEntity.StatusUpdates)
             .LastAsync();
@@ -57,13 +59,13 @@ public class StatusServiceTests
     {
         // Arrange
         var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
         var statusService = new StatusService(dbContext);
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
-        var applications = GenerateUserApplications(user!, 2);
-        applications.Last()!.StatusUpdates.Add(new ApplicationStatus
+        var mockUserManager = GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
+        var applications = GenerateUserApplications(user, 2);
+        applications.Last().StatusUpdates.Add(new ApplicationStatus
         {
             Status = Status.InProgress,
             Comment = "123",
@@ -102,12 +104,12 @@ public class StatusServiceTests
     {
         // Arrange
         var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
         var statusService = new StatusService(dbContext);
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
-        var applications = GenerateUserApplications(user!, 2);
+        var mockUserManager = GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
+        var applications = GenerateUserApplications(user, 2);
         await dbContext.Applications.AddRangeAsync(applications);
         await dbContext.SaveChangesAsync();
         var testApplication = await dbContext.Applications

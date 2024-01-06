@@ -3,7 +3,6 @@ using StudentTransfer.Dal.Entities.Vacant;
 using StudentTransfer.Dal.Enums;
 using StudentTransfer.Utils.Dto.Application;
 using static StudentTransfer.UnitTests.MockDataGenerator;
-using static StudentTransfer.UnitTests.MockManagersGenerator;
 
 namespace StudentTransfer.UnitTests.Bll;
 
@@ -13,14 +12,14 @@ public class ApplicationServiceTests
     public async Task GetAllAsync_WithSingleUser()
     {
         // Arrange
-        var dbContext = GetDbContext();
+        var dbContext = MockManager.GetDbContext();
         
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
+        var mockUserManager = MockManager.GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         
-        var applications = GenerateUserApplications(user!, 2);
+        var applications = GenerateUserApplications(user, 2);
         await dbContext.Applications.AddRangeAsync(applications);
         await dbContext.SaveChangesAsync();
         
@@ -35,17 +34,16 @@ public class ApplicationServiceTests
     public async Task GetAllAsync_WithManyUsers()
     {
         // Arrange
-        var dbContext = GetDbContext();
+        var dbContext = MockManager.GetDbContext();
         
-        var userId = Guid.NewGuid();
-        var userId2 = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null), (userId2, null));
+        var mockUserManager = MockManager.GetMockUserManager();
+        var users = mockUserManager.SetupUsers(2);
+        
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
-        var user1 = await mockUserManager.Object.FindByIdAsync(userId.ToString());
-        var user2 = await mockUserManager.Object.FindByIdAsync(userId2.ToString());
 
-        var applications = GenerateUserApplications(user1!, 2);
-        applications.AddRange(GenerateUserApplications(user2!, 2));
+        var applications = users
+            .SelectMany(user => GenerateUserApplications(user, 2))
+            .ToList();
         await dbContext.Applications.AddRangeAsync(applications);
         await dbContext.SaveChangesAsync();
         
@@ -60,8 +58,8 @@ public class ApplicationServiceTests
     public async Task GetAllAsync_WithoutApplications()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var mockUserManager = GetMockUserManager((Guid.Empty, null));
+        var dbContext = MockManager.GetDbContext();
+        var mockUserManager = MockManager.GetMockUserManager();
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
         // Act
@@ -75,61 +73,61 @@ public class ApplicationServiceTests
     public async Task GetAllByUserAsync_WithSingleUser()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
-        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
+        var dbContext = MockManager.GetDbContext();
         
-        var applications = GenerateUserApplications(user!, 2);
+        var mockUserManager = MockManager.GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
+        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
+        
+        var applications = GenerateUserApplications(user, 2);
         await dbContext.Applications.AddRangeAsync(applications);
         await dbContext.SaveChangesAsync();
         
         // Act
-        var result = await applicationService.GetAllByUserAsync(userId);
+        var result = await applicationService.GetAllByUserAsync(user.Id);
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(applications.Count, result.Count);
+        Assert.Equal(2, result.Count);
     }
     
     [Fact]
     public async Task GetAllByUserAsync_WithOtherUsers()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var userId2 = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null), (userId2, null));
-        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
-        var user1 = await mockUserManager.Object.FindByIdAsync(userId.ToString());
-        var user2 = await mockUserManager.Object.FindByIdAsync(userId2.ToString());
+        var dbContext = MockManager.GetDbContext();
         
-        var applications = GenerateUserApplications(user1!, 2);
-        var applications2 = GenerateUserApplications(user2!, 2);
+        var mockUserManager = MockManager.GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
+        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
+
+        var applications = GenerateUserApplications(user, 2);
+        
         await dbContext.Applications.AddRangeAsync(applications);
-        await dbContext.Applications.AddRangeAsync(applications2);
         await dbContext.SaveChangesAsync();
         
         // Act
-        var result = await applicationService.GetAllByUserAsync(userId);
+        var result = await applicationService.GetAllByUserAsync(user.Id);
     
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(applications.Count, result.Count);
+        Assert.Equal(2, result.Count);
     }
     
     [Fact]
     public async Task GetAllByUserAsync_ReturnsNullWhenUserNotFound()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
-        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
+        var dbContext = MockManager.GetDbContext();
         
-        var applications = GenerateUserApplications(user!, 2);
+        var mockUserManager = MockManager.GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
+        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
+        
+        var applications = GenerateUserApplications(user, 2);
         await dbContext.Applications.AddRangeAsync(applications);
         await dbContext.SaveChangesAsync();
         var testUserId = Guid.NewGuid();
@@ -145,13 +143,15 @@ public class ApplicationServiceTests
     public async Task GetByIdAsync_ReturnsApplicationDtoById()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
-        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
+        var dbContext = MockManager.GetDbContext();
         
-        var applications = GenerateUserApplications(user!, 3);
+        var mockUserManager = MockManager.GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
+        var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
+        
+        var applications = GenerateUserApplications(user, 2);
+        
         await dbContext.Applications.AddRangeAsync(applications);
         await dbContext.SaveChangesAsync();
     
@@ -171,8 +171,8 @@ public class ApplicationServiceTests
     public async Task GetByIdAsync_ReturnsNullWhenApplicationNotFound()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var mockUserManager = GetMockUserManager((Guid.Empty, null));
+        var dbContext = MockManager.GetDbContext();
+        var mockUserManager = MockManager.GetMockUserManager();
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
         
         // Act
@@ -186,9 +186,11 @@ public class ApplicationServiceTests
     public async Task CreateAsync_ReturnsApplicationDtoOrNull()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
+        var dbContext = MockManager.GetDbContext();
+        
+        var mockUserManager = MockManager.GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
 
@@ -215,25 +217,26 @@ public class ApplicationServiceTests
         };
         
         // Act
-        var result = await applicationService.CreateAsync(createRequest, userId);
+        var result = await applicationService.CreateAsync(createRequest, user.Id);
     
         // Assert
         Assert.NotNull(result);
         Assert.Single(dbContext.Applications);
-        Assert.Equal(userId, result.UserId);
+        Assert.Equal(user.Id, result.UserId);
         Assert.Equal(createRequest.Date, result.InitialDate);
     }
     
     [Fact]
-    public async Task CreateAsync_WhenVacantDirectionNotFound()
+    public async Task CreateAsync_ReturnsNullWhenVacantDirectionNotFound()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
+        var dbContext = MockManager.GetDbContext();
+        
+        var mockUserManager = MockManager.GetMockUserManager();
+        var user = mockUserManager.SetupUsers(1).Single();
+        
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         var createRequest = new CreateApplicationRequest
         {
             Type = "0",
@@ -243,7 +246,7 @@ public class ApplicationServiceTests
         };
         
         // Act
-        var result = await applicationService.CreateAsync(createRequest, userId);
+        var result = await applicationService.CreateAsync(createRequest, user.Id);
     
         // Assert
         Assert.Null(result);
@@ -253,12 +256,13 @@ public class ApplicationServiceTests
     public async Task CreateAsync_ReturnsNullWhenUserNotFound()
     {
         // Arrange
-        var dbContext = GetDbContext();
-        var userId = Guid.NewGuid();
-        var mockUserManager = GetMockUserManager((userId, null));
+        var dbContext = MockManager.GetDbContext();
+        
+        var mockUserManager = MockManager.GetMockUserManager();
+        mockUserManager.SetupUsers(1);
+        
         var applicationService = new ApplicationService(dbContext, mockUserManager.Object);
 
-        var user = await mockUserManager.Object.FindByIdAsync(userId.ToString());
         var createRequest = new CreateApplicationRequest
         {
             Type = "0",
@@ -282,6 +286,7 @@ public class ApplicationServiceTests
         };
         await dbContext.VacantList.AddAsync(direction);
         await dbContext.SaveChangesAsync();
+        
         var testUserId = Guid.NewGuid();
         
         // Act
