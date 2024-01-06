@@ -33,7 +33,11 @@ public class ApplicationController : ControllerBase
         if (isAdmin)
             return await _service.GetAllAsync();
         
-        return await _service.GetAllByUserAsync(Guid.Parse(userId));
+        var dtos = await _service.GetAllByUserAsync(Guid.Parse(userId));
+
+        if (dtos == null)
+            return NotFound();
+        return Ok(dtos);
     }
 
     [HttpGet("{id:int}")]

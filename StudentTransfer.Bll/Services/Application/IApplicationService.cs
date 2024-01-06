@@ -9,7 +9,7 @@ public interface IApplicationService
     
     Task<List<ApplicationDto>> GetActiveAsync();
     
-    Task<List<ApplicationDto>> GetAllByUserAsync(Guid userId);
+    Task<List<ApplicationDto>?> GetAllByUserAsync(Guid userId);
     
     Task<ApplicationDto?> GetByIdAsync(int id);
 

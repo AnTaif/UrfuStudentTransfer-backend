@@ -36,8 +36,12 @@ public class ApplicationService : IApplicationService
         return dtos;
     }
 
-    public async Task<List<ApplicationDto>> GetAllByUserAsync(Guid userId)
+    public async Task<List<ApplicationDto>?> GetAllByUserAsync(Guid userId)
     {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null)
+            return null; 
+        
         var applications =  await _context.Applications
             .Where(entity => entity.AppUserId == userId)
             .Include(entity => entity.Files)
@@ -105,7 +109,7 @@ public class ApplicationService : IApplicationService
             User = user,
             CurrentStatus = newStatus.Status,
             StatusUpdates = new List<ApplicationStatus>() { newStatus },
-            InitialDate = request.Date.ToUniversalTime(),
+            InitialDate = request.Date.ToUniversalTime(), //TODO: remove date from dto and use DateTime.UtcNow instead
             Direction = direction,
             IsActive = true
         };
