@@ -13,7 +13,7 @@ public static class VacantListParser
     {
         try
         {
-            var htmlPage = await DownloadHtmlAsync();
+            var htmlPage = await DownloadHtmlAsync(VacantUrl);
             var vacantList = ParseHtml(htmlPage);
 
             return vacantList;
@@ -24,17 +24,17 @@ public static class VacantListParser
             return null;
         }
     }
-    
-    private static async Task<string> DownloadHtmlAsync()
+
+    private static async Task<string> DownloadHtmlAsync(string requestUrl)
     {
         using var client = new HttpClient();
-        var response = await client.GetAsync(VacantUrl);
+        var response = await client.GetAsync(requestUrl);
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadAsStringAsync();
     }
 
-    private static List<VacantDirection> ParseHtml(string html)
+    public static List<VacantDirection> ParseHtml(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
